@@ -12,9 +12,10 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 2
-        versionName "1.0.1"
+        versionCode 1
+        versionName "1.0.0"
         vectorDrawables.useSupportLibrary = true
+
         if(project.findProperty("facebook_app_id") == null) {
             throw new FileNotFoundException("facebook_app_id not found in gradle.properties")
         } else {
@@ -35,6 +36,8 @@ android {
         } else {
             resValue("string", "line_channel_id", (project.findProperty("line_channel_id")))
         }
+
+
     }
 
     buildTypes {
@@ -59,4 +62,4 @@ repositories {
     mavenCentral()
 }
 
-apply from: './bintray.gradle'
+apply from: 'publish.gradle'
