@@ -1,5 +1,5 @@
 # appcore-android
-## Setting
+## Social Login (Facebook, Google, Line) Setting
 How to implement library
 - Step.1 Add maven repository url in your root build.gradle:
     	
@@ -26,7 +26,7 @@ Add to gradle.properties
     google_default_web_client_id="your_google_default_web_client_id"
     line_channel_id="your_line_channel_id"
 
-Add to build.gradle
+Add to build.gradle: just add what you need.
      
     defaultConfig {
         
