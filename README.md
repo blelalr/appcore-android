@@ -71,9 +71,16 @@ How to use
     
         Auth.logout()
         
-- UserInfo is MutableLiveData<UserInfo> 
+- Update UI when UserInfo isLogin change
 
-        Auth.getUserInfo().observe (...)
+        Auth.getUserInfo().observe( this, userInfo -> {
+            if(userInfo.isLogin) {
+                setLoginView();
+            } else {
+                setLogoutView();
+            }
+         
+        });
 
 - UserInfo Model
         
