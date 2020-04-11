@@ -1,2 +1,2 @@
-include ':app', ':SocialLogin'
+include ':app', ':SocialLogin', ':nav-components'
 rootProject.name='AppCore'

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">NavComponents</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="toolbar_home_title">Home Title</string>
+    <string name="toolbar_explore_title">Explore Title</string>
+    <string name="toolbar_member_title">Member Title</string>
+</resources>

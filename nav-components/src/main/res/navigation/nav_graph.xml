@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@+id/nav_home_fragment">
+
+    <fragment
+        android:id="@+id/nav_home_fragment"
+        android:label="@string/toolbar_home_title"
+        android:name="com.android.nav_components.HomeFragment"
+        />
+
+    <fragment
+        android:id="@+id/nav_explore_fragment"
+        android:name="com.android.nav_components.ExploreFragment"
+        android:label="@string/toolbar_explore_title"
+        />
+
+    <fragment
+        android:id="@+id/nav_member_fragment"
+        android:name="com.android.nav_components.MemberFragment"
+        android:label="@string/toolbar_member_title"
+        />
+
+</navigation>
