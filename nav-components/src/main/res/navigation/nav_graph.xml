@@ -39,5 +39,6 @@
         android:name="com.android.nav_components.AddFragment"
         android:label="@string/toolbar_add_title"
         tools:layout="@layout/fragment_add" />
+    
 
 </navigation>
