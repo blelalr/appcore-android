@@ -1,33 +1,38 @@
 package com.android.app_aqi.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-data class BaseResponse @JvmOverloads constructor(
+@Entity(tableName = "AQI")
+data class AqiModel @JvmOverloads constructor(
+    @PrimaryKey(autoGenerate = true)
+    var id: Long,
 
     @field:SerializedName("MonitorDate")
-    val monitorDate: String? = null,
+    var monitorDate: String? = null,
 
     @field:SerializedName("SiteId")
-    val siteId: String? = null,
+    var siteId: String? = null,
 
     @field:SerializedName("SiteName")
-    val siteName: String? = null,
+    var siteName: String? = null,
 
     @field:SerializedName("ItemEngName")
-    val itemEngName: String? = null,
+    var itemEngName: String? = null,
 
     @field:SerializedName("ItemName")
-    val itemName: String? = null,
+    var itemName: String? = null,
 
     @field:SerializedName("Concentration")
-    val concentration: String? = null,
+    var concentration: String? = null,
 
     @field:SerializedName("County")
-    val county: String? = null,
+    var county: String? = null,
 
     @field:SerializedName("ItemId")
     var itemId: String? = null,
 
     @field:SerializedName("ItemUnit")
-    val itemUnit: String? = null
+    var itemUnit: String? = null
 )

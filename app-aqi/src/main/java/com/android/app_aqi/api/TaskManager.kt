@@ -1,11 +1,9 @@
 package com.android.app_aqi.api
 
-import android.util.Log
 import com.android.app_aqi.api.ApiServiceBuilder.Companion.retrofit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class TaskManager {
 
@@ -17,24 +15,15 @@ class TaskManager {
 
     fun start() {
         CoroutineScope(Dispatchers.IO).launch {
-            Log.d("esther", "" + taskService.params.toString())
-            val response = retrofit.getAqi(taskService.siteId, taskService.params)
+            var response = retrofit.getAqi(taskService.siteId, taskService.params)
+            // To get aqi response object
+            if (response.isSuccessful) {
+                taskService.onTaskSucceed(response.body())
 
-            withContext(Dispatchers.Main) {
-                // To get BookStore Object
-                if (response.isSuccessful) {
-
-                    taskService.onTaskSucceed(response.body()?.get(0))
-
-                } else {
-
-                    taskService.onTaskFailed(response.errorBody())
-
-                    // Handle errors here
-                }
+            // Handle errors here
+            } else {
+                taskService.onTaskFailed(response.errorBody())
             }
-
-
         }
     }
 }

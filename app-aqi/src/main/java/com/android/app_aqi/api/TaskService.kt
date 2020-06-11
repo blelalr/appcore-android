@@ -1,30 +1,29 @@
 package com.android.app_aqi.api
 
-import com.android.app_aqi.RequestEntity
-import com.android.app_aqi.model.BaseResponse
+import com.android.app_aqi.model.RequestEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import okhttp3.ResponseBody
 
 abstract class TaskService {
+
     lateinit var siteId: String
-    lateinit var params: Map<String, Any>
+    lateinit var params: Map<String, String>
 
-    abstract fun onTaskSucceed(entity: BaseResponse?)
+    abstract fun onTaskSucceed(result: Any?)
 
-    abstract fun onTaskFailed(errorBody: ResponseBody?)
+    abstract fun onTaskFailed(error: Any?)
 
-    open fun genParams(request: RequestEntity): Map<String, Any>{
+    open fun genParams(request: RequestEntity): Map<String, String>{
         return request.serializeToMap()
     }
 
     //convert a data class to a map
-    fun <T> T.serializeToMap(): Map<String, Any> {
+    private fun <T> T.serializeToMap(): Map<String, String> {
         return convert()
     }
 
     //convert a map to a data class
-    inline fun <reified T> Map<String, Any>.toDataClass(): T {
+    inline fun <reified T> Map<String, String>.toDataClass(): T {
         return convert()
     }
 
