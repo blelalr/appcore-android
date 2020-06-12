@@ -8,6 +8,7 @@ abstract class TaskService {
 
     lateinit var siteId: String
     lateinit var params: Map<String, String>
+    lateinit var request: RequestEntity
 
     abstract fun onTaskSucceed(result: Any?)
 

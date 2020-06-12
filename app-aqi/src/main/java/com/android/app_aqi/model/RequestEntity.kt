@@ -11,7 +11,10 @@ data class RequestEntity @JvmOverloads constructor(
         var skip: Int? = null,
 
         @SerializedName("\$format")
-        var format: String
+        var format: String,
+
+        @SerializedName("\$orderby")
+        var orderby: String
 )
 
 

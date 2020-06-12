@@ -1,5 +1,6 @@
 package com.android.app_aqi.task
 
+import android.util.Log
 import com.android.app_aqi.model.RequestEntity
 import com.android.app_aqi.api.TaskService
 import com.android.app_aqi.model.AqiModel
@@ -18,12 +19,15 @@ class AqiDataTask : TaskService{
         this.taskListener = listener
         this.siteId = siteId
         this.params = genParams(request)
+        this.request = request
     }
 
     override fun onTaskSucceed(result: Any?) {
         if(result != null) {
             var response : List<AqiModel> = result.convert()
             taskListener.onSucceed(response)
+
+            Log.d("esther", "onSucceed!")
         } else {
             taskListener.onFailed(result)
         }
