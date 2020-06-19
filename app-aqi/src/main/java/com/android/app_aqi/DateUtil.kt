@@ -2,6 +2,7 @@ package com.android.app_aqi
 
 import android.text.format.DateUtils
 import java.text.SimpleDateFormat
+import java.util.*
 
 object DateUtil {
 
@@ -14,4 +15,9 @@ object DateUtil {
         return DateUtils.isToday(monitorDateTime.time)
     }
 
+    fun DateToStamp(date: String): Long {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.TAIWAN)
+
+        return simpleDateFormat.parse(date).time
+    }
 }

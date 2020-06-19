@@ -15,9 +15,8 @@ class AqiDataTask : TaskService{
 
     var taskListener : TaskListener
 
-    constructor(listener: TaskListener, siteId: String, request: RequestEntity) {
+    constructor(listener: TaskListener, request: RequestEntity) {
         this.taskListener = listener
-        this.siteId = siteId
         this.params = genParams(request)
         this.request = request
     }

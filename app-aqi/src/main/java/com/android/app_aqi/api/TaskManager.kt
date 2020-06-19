@@ -15,7 +15,7 @@ class TaskManager {
 
     fun start() {
         CoroutineScope(Dispatchers.IO).launch {
-            var response = retrofit.getAqi(taskService.siteId, taskService.params)
+            var response = retrofit.getAqi(taskService.params)
             // To get aqi response object
             if (response.isSuccessful) {
                 taskService.onTaskSucceed(response.body())
