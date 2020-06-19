@@ -8,7 +8,6 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_root"
-        android:background="@color/color_green_L1"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
