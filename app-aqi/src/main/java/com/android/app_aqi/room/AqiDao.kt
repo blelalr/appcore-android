@@ -16,7 +16,7 @@ interface AqiDao {
     @Query("SELECT * FROM AQI WHERE siteId= :siteId AND publishTime= :publishTime")
     fun filterBySite(siteId: String?, publishTime: String?): List<AqiModel>
 
-    @Query("SELECT DISTINCT siteId, siteName, county, aQI ,longitude, latitude FROM AQI")
+    @Query("SELECT siteId, siteName, county ,longitude, latitude, aqi, MAX(publishTime) FROM AQI GROUP by siteId")
     fun getSiteList(): List<SiteModel>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

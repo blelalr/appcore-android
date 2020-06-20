@@ -31,7 +31,7 @@ class UpdateAQIWorker(context: Context, workerParams: WorkerParameters) : Worker
                         Log.d("esther", "Database is Null Or Empty")
                         result!!.forEach {aqi -> insertAqi(aqi)
                             Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString())
-                            aqi.id = aqi.siteId!!.toLong() + DateUtil.DateToStamp(aqi.publishTime.toString())
+                            aqi.id = aqi.siteId!!.toLong() + DateUtil.DateToStamp(aqi.publishTime!!)
                             aqiDatabase.getAqiDao().insert(aqi)
                         }
 

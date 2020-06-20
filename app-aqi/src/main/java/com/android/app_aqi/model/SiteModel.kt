@@ -23,6 +23,10 @@ data class SiteModel @JvmOverloads constructor(
         @field:SerializedName("Latitude")
         val latitude: String? = null,
 
+        @PrimaryKey(autoGenerate = false)
         @field:SerializedName("SiteId")
-        val siteId: String? = null
+        val siteId: String? = null,
+
+        @field:SerializedName("PublishTime")
+        val publishTime: String? = null
 ) : Serializable

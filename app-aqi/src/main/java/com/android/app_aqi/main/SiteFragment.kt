@@ -43,6 +43,7 @@ class SiteFragment : Fragment() {
 
         aqi = arguments!!.getSerializable(SiteModel::class.simpleName) as SiteModel
         siteName.text = aqi.siteName
+
         siteAqi.text = aqi.aQI
 
         var aqiNumber = aqi.aQI?.toInt()

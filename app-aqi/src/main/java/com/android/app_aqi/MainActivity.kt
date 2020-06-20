@@ -36,6 +36,15 @@ class MainActivity : AppCompatActivity() {
         siteViewPager = findViewById(R.id.vp_main)
         siteViewPagerAdapter = ViewPagerAdapter(this, siteList)
         siteViewPager.adapter = siteViewPagerAdapter
+//        siteViewPager.setPageTransformer(mAnimator)
     }
+
+//    private val mAnimator = ViewPager2.PageTransformer { page, position ->
+//        val absPos = Math.abs(position)
+//        page.apply {
+//            translationY = absPos * 500f
+//            translationX = 0f
+//        }
+//    }
 
 }
