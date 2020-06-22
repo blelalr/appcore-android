@@ -1,4 +1,4 @@
-package com.android.app_aqi.main
+package com.android.app_aqi.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +13,7 @@ import com.android.app_aqi.model.SiteModel
 
 class SiteFragment : Fragment() {
     companion object {
-        fun newInstance(aqi : SiteModel): SiteFragment{
+        fun newInstance(aqi : SiteModel): SiteFragment {
             val args = Bundle()
             args.putSerializable(SiteModel::class.simpleName, aqi)
             val fragment = SiteFragment()
@@ -46,25 +46,21 @@ class SiteFragment : Fragment() {
 
         siteAqi.text = aqi.aQI
 
-        var aqiNumber = aqi.aQI?.toInt()
-        setUIByAqi(aqiNumber!!)
-
-
+        setBackgroundColorByAqi(aqi.aQI?.toInt())
 
     }
 
-    fun setUIByAqi(value: Int){
-        var level = 0
-        when {
-            value == 0 -> level = 0
-            value <= 50 -> level = 1
-            value <= 100 -> level = 2
-            value <= 150 -> level = 3
-            value <= 200 -> level = 4
-            value <= 300 -> level = 5
-            value > 300 -> level = 6
-        }
-
+    private fun setBackgroundColorByAqi(value: Int?){
+//        var level = 0
+//        when {
+//            value == 0 -> level = 0
+//            value <= 50 -> level = 1
+//            value <= 100 -> level = 2
+//            value <= 150 -> level = 3
+//            value <= 200 -> level = 4
+//            value <= 300 -> level = 5
+//            value > 300 -> level = 6
+//        }
 
         when (value) {
             in 0..21 -> root.setBackgroundResource(R.color.color_green_L1)

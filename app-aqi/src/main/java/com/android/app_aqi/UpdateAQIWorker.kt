@@ -31,7 +31,7 @@ class UpdateAQIWorker(context: Context, workerParams: WorkerParameters) : Worker
                         Log.d("esther", "Database is Null Or Empty")
                         result!!.forEach {aqi -> insertAqi(aqi)
                             Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString())
-                            aqi.id = aqi.siteId!!.toLong() + DateUtil.DateToStamp(aqi.publishTime!!)
+                            aqi.id = aqi.siteId?.toLong()!! + aqi.publishTime?.let { DateUtil.DateToStamp(it)}!!
                             aqiDatabase.getAqiDao().insert(aqi)
                         }
 
@@ -39,7 +39,7 @@ class UpdateAQIWorker(context: Context, workerParams: WorkerParameters) : Worker
                         result!!.forEach {aqi ->
                             if(aqiDatabase.getAqiDao().filterBySite(aqi.siteId, aqi.publishTime).isNotEmpty()) return@forEach
                             Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString())
-                            aqi.id = aqi.siteId!!.toLong() + DateUtil.DateToStamp(aqi.publishTime!!)
+                            aqi.id = aqi.siteId?.toLong()!! + aqi.publishTime?.let { DateUtil.DateToStamp(it)}!!
                             aqiDatabase.getAqiDao().insert(aqi)
                         }
                     }

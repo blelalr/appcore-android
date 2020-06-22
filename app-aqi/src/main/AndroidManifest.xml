@@ -19,7 +19,7 @@
             android:authorities="${applicationId}.workmanager-init"
             tools:node="remove" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".main.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -1,4 +1,4 @@
-package com.android.app_aqi.main
+package com.android.app_aqi.home
 
 import androidx.lifecycle.ViewModel
 

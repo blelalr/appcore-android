@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.app_aqi.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.android.app_aqi.main.MainActivity">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/vp_main"
+    <FrameLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
@@ -14,8 +15,7 @@
         android:id="@+id/bottom_app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_bottom_app_bar_bg"
+        app:backgroundTint="@color/color_white_40_transparent"
         android:layout_gravity="bottom"/>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
