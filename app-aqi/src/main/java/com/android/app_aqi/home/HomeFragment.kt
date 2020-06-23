@@ -2,15 +2,14 @@ package com.android.app_aqi.home
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
+import androidx.core.app.SharedElementCallback
+import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
-import com.android.app_aqi.main.MainActivity
-
 import com.android.app_aqi.R
+import com.android.app_aqi.main.MainActivity
 import com.google.android.material.transition.MaterialContainerTransform
 
 // TODO: Rename parameter arguments, choose names that match
@@ -27,7 +26,7 @@ class HomeFragment : Fragment() {
     private var position: Int? = null
 //    private var param2: String? = null
     private lateinit var siteViewPager: ViewPager2
-    private lateinit var siteSiteViewPagerAdapter: SiteViewPagerAdapter
+    private lateinit var siteViewPagerAdapter: SiteViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +36,16 @@ class HomeFragment : Fragment() {
         }
 
         //設定進入的動畫
-        sharedElementEnterTransition = MaterialContainerTransform()
+//        sharedElementEnterTransition = MaterialContainerTransform()
+        val enterTransform = MaterialContainerTransform()
+        enterTransform.duration = 5000
+        enterTransform.drawingViewId = R.id.vp_main
+        sharedElementEnterTransition = enterTransform
+
+//        val returnTransform = MaterialContainerTransform()
+//        returnTransform.duration = 1500
+//        sharedElementReturnTransition = returnTransform
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -50,11 +58,10 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViewPager() {
-        siteSiteViewPagerAdapter = SiteViewPagerAdapter(activity!!, (activity as MainActivity).siteList)
-        siteViewPager.adapter = siteSiteViewPagerAdapter
+        siteViewPagerAdapter = activity?.let { SiteViewPagerAdapter(it, (activity as MainActivity).siteList) }!!
+        siteViewPager.adapter = siteViewPagerAdapter
         arguments?.getInt(ARG_PARAM1)?.let { siteViewPager.setCurrentItem(it, false) }
     }
-
 
     companion object {
         @JvmStatic

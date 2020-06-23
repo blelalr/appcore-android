@@ -23,7 +23,7 @@ class SiteListAdapter(private val siteList : List<SiteModel>, private val listen
     }
 
     override fun getItemCount(): Int {
-        return 4
+        return siteList.size
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {

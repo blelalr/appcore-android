@@ -7,7 +7,7 @@ import com.android.app_aqi.model.SiteModel
 
 class SiteViewPagerAdapter(activity: FragmentActivity, val siteList : List<SiteModel>) :FragmentStateAdapter(activity) {
     override fun getItemCount(): Int {
-        return 4
+        return siteList.size
     }
 
     override fun createFragment(position: Int): Fragment {
