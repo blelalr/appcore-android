@@ -2,49 +2,50 @@ package com.android.app_aqi.home
 
 
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.android.app_aqi.R
+import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.main.MainActivity
 import com.google.android.material.transition.MaterialContainerTransform
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "position"
-//private const val ARG_PARAM2 = "param2"
 /**
  * A simple [Fragment] subclass.
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var position: Int? = null
-//    private var param2: String? = null
-    private lateinit var siteViewPager: ViewPager2
+    lateinit var sharedViewModel: SharedViewModel
+    private lateinit var siteViewPager: ViewPager
     private lateinit var siteViewPagerAdapter: SiteViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            position = it.getInt(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-        }
-
-        //設定進入的動畫
-//        sharedElementEnterTransition = MaterialContainerTransform()
-        val enterTransform = MaterialContainerTransform()
-        enterTransform.duration = 5000
-        enterTransform.drawingViewId = R.id.vp_main
-        sharedElementEnterTransition = enterTransform
-
-//        val returnTransform = MaterialContainerTransform()
-//        returnTransform.duration = 1500
-//        sharedElementReturnTransition = returnTransform
+        postponeEnterTransition()
+        setEnterSharedElementCallback(object : androidx.core.app.SharedElementCallback(){
+            override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String, View>?) {
+                val item = sharedViewModel.siteList[siteViewPager.currentItem].siteName
+                val itemView = (siteViewPagerAdapter.instantiateItem(siteViewPager, siteViewPager.currentItem) as Fragment).view?.findViewById<ConstraintLayout>(R.id.cl_root) as View
+                names?.clear()
+                sharedElements?.clear()
+                item?.let { 
+                    names?.add(it)
+                    sharedElements?.put(it, itemView)
+                }
+            }
+        })
+        sharedElementEnterTransition = TransitionInflater.from(requireContext()).inflateTransition(R.transition.list_to_pager_enter_transition)
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
     }
 
@@ -53,23 +54,22 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_home, container, false)
         siteViewPager = view.findViewById(R.id.vp_main)
-        initViewPager()
         return view
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        initViewPager()
+    }
+
     private fun initViewPager() {
-        siteViewPagerAdapter = activity?.let { SiteViewPagerAdapter(it, (activity as MainActivity).siteList) }!!
+        siteViewPagerAdapter = SiteViewPagerAdapter(siteList = sharedViewModel.siteList, fm = childFragmentManager)
         siteViewPager.adapter = siteViewPagerAdapter
-        arguments?.getInt(ARG_PARAM1)?.let { siteViewPager.setCurrentItem(it, false) }
+        siteViewPager.currentItem = sharedViewModel.currentPos
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(position: Int) =
-                HomeFragment().apply {
-                    arguments = Bundle().apply {
-                        putInt(ARG_PARAM1, position)
-                    }
-                }
+        fun newInstance() = HomeFragment()
     }
 }

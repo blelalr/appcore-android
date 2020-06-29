@@ -1,26 +1,27 @@
 package com.android.app_aqi.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
 import com.android.app_aqi.R
+import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.home.HomeFragment
 import com.android.app_aqi.list.ListFragment
-import com.android.app_aqi.model.SiteModel
 import com.android.app_aqi.room.AqiDatabase
 import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.transition.MaterialContainerTransform
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-class MainActivity : AppCompatActivity(), ListFragment.OnListFragmentInteractionListener{
+class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener{
     private lateinit var bottomAppBar: BottomAppBar
-    lateinit var siteList: List<SiteModel>
+    lateinit var sharedViewModel : SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
         bottomAppBar = findViewById(R.id.bottom_app_bar)
     }
 
@@ -35,7 +36,10 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListFragmentInteraction
         bottomAppBar.setOnMenuItemClickListener { item ->
             when(item.itemId) {
                 R.id.show_list -> {
-                    replaceByListFragment()
+                    if(supportFragmentManager.findFragmentByTag(ListFragment::class.simpleName) == null)
+                        replaceByListFragment()
+                    else
+                        onBackPressed()
                     true
                 }
                 else -> false
@@ -48,45 +52,48 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListFragmentInteraction
                 .allowMainThreadQueries()
                 .build()
         GlobalScope.launch {
-            siteList = aqiDatabase.getAqiDao().getSiteList()
+            sharedViewModel.siteList = aqiDatabase.getAqiDao().getSiteList()
+            replaceByHomeFragment(null)
         }
-        replaceByHomeFragment()
         aqiDatabase.close()
-    }
-
-    private fun replaceByHomeFragment() {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.main_container, HomeFragment.newInstance(0), HomeFragment::class.simpleName)
-                .commit()
     }
 
     private fun replaceByListFragment() {
         supportFragmentManager.beginTransaction()
-                .replace(R.id.main_container, ListFragment.newInstance() , ListFragment::class.simpleName)
+                .add(R.id.main_container, ListFragment.newInstance(), ListFragment::class.simpleName)
+                .addToBackStack(ListFragment::class.simpleName)
                 .commit()
 
     }
 
-    private fun replaceByHomeFragment(itemView: View, position: Int) {
+    private fun replaceByHomeFragment(itemView: View?) {
+        if(itemView == null) {
+            supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.main_container, HomeFragment.newInstance())
+                    .commit()
 
-        // 步驟1：點下圖片後，設定該圖片的TransitionName。
-        itemView.transitionName = "shared_element_container"
-//        // 步驟3：設定動畫
-//        val materialContainerTransform = MaterialContainerTransform()
-//        fragment.sharedElementEnterTransition = materialContainerTransform
-        // 步驟4：開啟Fragment，設定ShareElement
-
-        supportFragmentManager
-                .beginTransaction()
-                .addSharedElement(itemView, itemView.transitionName)
-                .replace(R.id.main_container, HomeFragment.newInstance(position))
-                .commit()
-
+        } else {
+            supportFragmentManager
+                    .beginTransaction()
+                    .addSharedElement(itemView, itemView.transitionName)
+                    .replace(R.id.main_container, HomeFragment.newInstance())
+                    .addToBackStack(HomeFragment::class.simpleName)
+                    .commit()
+        }
     }
 
-    override fun onFragmentInteraction(itemView: View, position: Int) {
-        replaceByHomeFragment(itemView, position)
+    override fun onListItemClick(itemView: View, position: Int) {
+        sharedViewModel.currentPos = position
+        replaceByHomeFragment(itemView)
     }
 
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount != 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            super.onBackPressed()
+        }
 
+    }
 }

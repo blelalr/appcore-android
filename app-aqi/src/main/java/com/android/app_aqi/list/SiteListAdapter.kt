@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.android.app_aqi.R
 import com.android.app_aqi.model.SiteModel
@@ -29,6 +30,8 @@ class SiteListAdapter(private val siteList : List<SiteModel>, private val listen
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val site: SiteModel = siteList[position]
         holder.bind(site)
+        ViewCompat.setTransitionName(holder.itemView, site.siteName)
+        // Setup shared element transition
         holder.itemView.setOnClickListener {
             listener.onItemClick(holder.itemView, position)
         }

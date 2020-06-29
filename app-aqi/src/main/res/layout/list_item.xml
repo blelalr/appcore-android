@@ -5,6 +5,8 @@
     android:layout_height="60dp"
     android:paddingStart="20dp"
     android:paddingEnd="20dp"
+    android:background="@android:color/transparent"
+    android:id="@+id/cl_item_root"
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView

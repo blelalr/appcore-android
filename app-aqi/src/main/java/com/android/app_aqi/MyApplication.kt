@@ -19,7 +19,7 @@ class MyApplication : Application(), Configuration.Provider{
                 .build()
 
         val workManager = WorkManager.getInstance(this)
-        // initialize WorkManager
+
 
         workManager.enqueueUniquePeriodicWork(Constant.WORKER_NAME, ExistingPeriodicWorkPolicy.KEEP, workRequest)
     }

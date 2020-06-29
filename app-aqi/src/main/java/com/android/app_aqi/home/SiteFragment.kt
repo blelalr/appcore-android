@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.android.app_aqi.R
@@ -31,6 +32,7 @@ class SiteFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        postponeEnterTransition()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +54,13 @@ class SiteFragment : Fragment() {
         siteAqi.text = aqi.aQI
 
         setBackgroundColorByAqi(aqi.aQI?.toInt())
+        ViewCompat.setTransitionName(root, aqi.siteName)
 
+    }
+
+    override fun onStart() {
+        super.onStart()
+        parentFragment?.startPostponedEnterTransition()
     }
 
     private fun setBackgroundColorByAqi(value: Int?){

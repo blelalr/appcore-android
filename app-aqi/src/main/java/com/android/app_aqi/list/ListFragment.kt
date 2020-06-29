@@ -1,48 +1,52 @@
 package com.android.app_aqi.list
 
-import android.app.SharedElementCallback
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionInflater
 import com.android.app_aqi.R
+import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.main.MainActivity
-import com.google.android.material.transition.Hold
-
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//private const val ARG_PARAM1 = "param1"
-//private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [ListFragment.OnListFragmentInteractionListener] interface
+ * [ListFragment.OnListItemClickListener] interface
  * to handle interaction events.
  * Use the [ListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
 class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
-    // TODO: Rename and change types of parameters
-//    private var param1: String? = null
-//    private var param2: String? = null
-    private var listenerList: OnListFragmentInteractionListener? = null
+    private var listenerList: OnListItemClickListener? = null
     private lateinit var listRecyclerView :RecyclerView
+    private lateinit var sharedViewModel : SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-        }
-        exitTransition = Hold()
+
+//        exitTransition = TransitionInflater.from(context)
+//                .inflateTransition(R.transition.list_to_pager_exit_transition)
+        setExitSharedElementCallback(object: androidx.core.app.SharedElementCallback(){
+            override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String, View>?) {
+                val view = listRecyclerView.findViewHolderForAdapterPosition(sharedViewModel.currentPos)?.itemView
+                val item = sharedViewModel.siteList[sharedViewModel.currentPos].siteName
+                if(view == null) return
+                names?.clear()
+                sharedElements?.clear()
+                item?.let {
+                    names?.add(it)
+                    sharedElements?.put(it, view)
+                }
+            }
+        })
+
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
     }
 
@@ -57,22 +61,16 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
 
     private fun initRecyclerView() {
         listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        listRecyclerView.adapter = SiteListAdapter((activity as MainActivity).siteList, this)
+        listRecyclerView.adapter = SiteListAdapter((activity as MainActivity).sharedViewModel.siteList, this)
     }
 
     override fun onItemClick(itemView: View, position: Int) {
-        Log.d("esther", "itemClick $position")
-        listenerList?.onFragmentInteraction(itemView, position)
+        listenerList?.onListItemClick(itemView, position)
     }
 
-    //     TODO: Rename method, update argument and hook method into UI event
-//    fun onButtonPressed(uri: Uri) {
-//        listenerList?.onFragmentInteraction(uri)
-//    }
-//
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnListFragmentInteractionListener) {
+        if (context is OnListItemClickListener) {
             listenerList = context
         } else {
             throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
@@ -95,28 +93,12 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
      * (http://developer.android.com/training/basics/fragments/communicating.html)
      * for more information.
      */
-    interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        fun onFragmentInteraction(itemView: View, position: Int)
+    interface OnListItemClickListener {
+        fun onListItemClick(itemView: View, position: Int)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance() =
-                ListFragment().apply {
-//                    arguments = Bundle().apply {
-//                        putString(ARG_PARAM1, param1)
-//                        putString(ARG_PARAM2, param2)
-//                    }
-                }
+        fun newInstance() =ListFragment()
     }
 }
