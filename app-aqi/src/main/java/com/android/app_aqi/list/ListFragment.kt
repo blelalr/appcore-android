@@ -30,22 +30,7 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        exitTransition = TransitionInflater.from(context)
-//                .inflateTransition(R.transition.list_to_pager_exit_transition)
-        setExitSharedElementCallback(object: androidx.core.app.SharedElementCallback(){
-            override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String, View>?) {
-                val view = listRecyclerView.findViewHolderForAdapterPosition(sharedViewModel.currentPos)?.itemView
-                val item = sharedViewModel.siteList[sharedViewModel.currentPos].siteName
-                if(view == null) return
-                names?.clear()
-                sharedElements?.clear()
-                item?.let {
-                    names?.add(it)
-                    sharedElements?.put(it, view)
-                }
-            }
-        })
-
+        exitTransition = TransitionInflater.from(context).inflateTransition(R.transition.list_to_pager_exit_transition)
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
 
     }
@@ -55,8 +40,57 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_list, container, false)
         listRecyclerView = view.findViewById(R.id.rv_list)
-        initRecyclerView()
         return view
+    }
+
+
+    /**
+     * Scrolls the recycler view to show the last viewed item in the grid. This is important when
+     * navigating back from the grid.
+     */
+    private fun scrollToPosition() {
+        listRecyclerView.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
+            override fun onLayoutChange(v: View,
+                                        left: Int,
+                                        top: Int,
+                                        right: Int,
+                                        bottom: Int,
+                                        oldLeft: Int,
+                                        oldTop: Int,
+                                        oldRight: Int,
+                                        oldBottom: Int) {
+                listRecyclerView.removeOnLayoutChangeListener(this)
+                val listLayoutManager = listRecyclerView.layoutManager
+                val viewAtPosition = listLayoutManager?.findViewByPosition(sharedViewModel.currentPos)
+                // Scroll to position if the view for the current position is null (not currently part of
+                // layout manager children), or it's not completely visible.
+                if (viewAtPosition == null || listLayoutManager.isViewPartiallyVisible(viewAtPosition, false, true)) {
+                    listRecyclerView.post(Runnable { listLayoutManager?.scrollToPosition(sharedViewModel.currentPos)})
+                }
+            }
+        })
+    }
+
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initRecyclerView()
+        scrollToPosition()
+        prepareTransitions()
+    }
+
+    private fun prepareTransitions() {
+        setExitSharedElementCallback(object: androidx.core.app.SharedElementCallback(){
+            override fun onMapSharedElements(names: MutableList<String>?, sharedElements: MutableMap<String, View>?) {
+                // Locate the ViewHolder for the clicked position.
+                val selectedViewHolder: RecyclerView.ViewHolder = listRecyclerView
+                        .findViewHolderForAdapterPosition(sharedViewModel.currentPos)
+                        ?: return
+
+                // Map the first shared element name to the child ImageView.
+                sharedElements!![names!![0]]= selectedViewHolder.itemView.findViewById(R.id.cl_item_root)
+            }
+        })
     }
 
     private fun initRecyclerView() {
@@ -73,7 +107,7 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
         if (context is OnListItemClickListener) {
             listenerList = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnListItemClickListener")
         }
     }
 
@@ -82,23 +116,13 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
         listenerList = null
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     *
-     *
-     * See the Android Training lesson [Communicating with Other Fragments]
-     * (http://developer.android.com/training/basics/fragments/communicating.html)
-     * for more information.
-     */
+
     interface OnListItemClickListener {
         fun onListItemClick(itemView: View, position: Int)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() =ListFragment()
+        fun newInstance() = ListFragment()
     }
 }

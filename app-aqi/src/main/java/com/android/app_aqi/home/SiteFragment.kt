@@ -54,7 +54,7 @@ class SiteFragment : Fragment() {
         siteAqi.text = aqi.aQI
 
         setBackgroundColorByAqi(aqi.aQI?.toInt())
-        ViewCompat.setTransitionName(root, aqi.siteName)
+        ViewCompat.setTransitionName(root, aqi.siteId)
 
     }
 

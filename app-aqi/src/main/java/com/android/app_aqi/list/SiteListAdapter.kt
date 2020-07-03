@@ -29,8 +29,9 @@ class SiteListAdapter(private val siteList : List<SiteModel>, private val listen
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val site: SiteModel = siteList[position]
+        holder.setIsRecyclable(false)
         holder.bind(site)
-        ViewCompat.setTransitionName(holder.itemView, site.siteName)
+        ViewCompat.setTransitionName(holder.itemView, site.siteId)
         // Setup shared element transition
         holder.itemView.setOnClickListener {
             listener.onItemClick(holder.itemView, position)

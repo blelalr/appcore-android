@@ -14,37 +14,18 @@ import com.android.app_aqi.room.AqiDatabase
 import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener{
-    private lateinit var bottomAppBar: BottomAppBar
+class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, HomeFragment.OnMenuItemClickListener {
     lateinit var sharedViewModel : SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
-        bottomAppBar = findViewById(R.id.bottom_app_bar)
     }
 
     override fun onResume() {
         super.onResume()
         initData()
-        initAppbar()
-    }
-
-    private fun initAppbar() {
-        bottomAppBar.replaceMenu(R.menu.bottom_menu)
-        bottomAppBar.setOnMenuItemClickListener { item ->
-            when(item.itemId) {
-                R.id.show_list -> {
-                    if(supportFragmentManager.findFragmentByTag(ListFragment::class.simpleName) == null)
-                        replaceByListFragment()
-                    else
-                        onBackPressed()
-                    true
-                }
-                else -> false
-            }
-        }
     }
 
     private fun initData() {
@@ -58,11 +39,16 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener{
         aqiDatabase.close()
     }
 
-    private fun replaceByListFragment() {
-        supportFragmentManager.beginTransaction()
-                .add(R.id.main_container, ListFragment.newInstance(), ListFragment::class.simpleName)
-                .addToBackStack(ListFragment::class.simpleName)
-                .commit()
+    private fun replaceByListFragment(itemView: View) {
+        Log.d("esther", "replaceByListFragment${itemView.transitionName}")
+        if(supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.main_container, ListFragment.newInstance())
+                    .commit()
+        }
 
     }
 
@@ -72,14 +58,18 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener{
                     .beginTransaction()
                     .add(R.id.main_container, HomeFragment.newInstance())
                     .commit()
-
         } else {
-            supportFragmentManager
-                    .beginTransaction()
-                    .addSharedElement(itemView, itemView.transitionName)
-                    .replace(R.id.main_container, HomeFragment.newInstance())
-                    .addToBackStack(HomeFragment::class.simpleName)
-                    .commit()
+            if(supportFragmentManager.backStackEntryCount > 0) {
+                supportFragmentManager.popBackStack()
+            } else {
+                Log.d("esther", "replaceByHomeFragment${itemView.transitionName}")
+                supportFragmentManager
+                        .beginTransaction()
+                        .addSharedElement(itemView, itemView.transitionName)
+                        .replace(R.id.main_container, HomeFragment.newInstance())
+                        .addToBackStack(HomeFragment::class.simpleName)
+                        .commit()
+            }
         }
     }
 
@@ -88,12 +78,16 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener{
         replaceByHomeFragment(itemView)
     }
 
+    override fun onMenuItemClick(itemView: View, position: Int) {
+        sharedViewModel.currentPos = position
+        replaceByListFragment(itemView)
+    }
+
     override fun onBackPressed() {
-        if(supportFragmentManager.backStackEntryCount != 0) {
+        if(supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
             super.onBackPressed()
         }
-
     }
 }
