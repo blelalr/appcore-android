@@ -3,6 +3,6 @@
     android:duration="350"
     android:interpolator="@android:interpolator/fast_out_slow_in">
     <fade>
-        <targets android:targetId="@+id/cl_item_root"/>
+        <targets android:targetId="@+id/item_root"/>
     </fade>
 </transitionSet>

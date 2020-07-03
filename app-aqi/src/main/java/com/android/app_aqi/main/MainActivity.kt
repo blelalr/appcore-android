@@ -21,10 +21,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         sharedViewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
-    }
-
-    override fun onResume() {
-        super.onResume()
         initData()
     }
 

@@ -88,7 +88,7 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
                         ?: return
 
                 // Map the first shared element name to the child ImageView.
-                sharedElements!![names!![0]]= selectedViewHolder.itemView.findViewById(R.id.cl_item_root)
+                sharedElements!![names!![0]]= selectedViewHolder.itemView.findViewById(R.id.item_root)
             }
         })
     }
