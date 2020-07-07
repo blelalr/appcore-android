@@ -19,6 +19,9 @@ interface AqiDao {
     @Query("SELECT siteId, siteName, county ,longitude, latitude, aqi, MAX(publishTime) FROM AQI GROUP by siteId")
     fun getSiteList(): List<SiteModel>
 
+    @Query("SELECT siteId, siteName, county ,longitude, latitude, aqi, max(publishTime)  FROM AQI WHERE siteId IN (:followedSites) GROUP by siteId")
+    fun getAllFollowSite(followedSites: List<String>): List<SiteModel>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(aqi: AqiModel): Long
 

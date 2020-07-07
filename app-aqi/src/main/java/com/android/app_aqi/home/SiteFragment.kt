@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
@@ -28,7 +29,7 @@ class SiteFragment : Fragment() {
     private lateinit var viewModel: SiteViewModel
     private lateinit var siteName: TextView
     private lateinit var siteAqi: TextView
-    private lateinit var root: ConstraintLayout
+    private lateinit var root: CardView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,25 +77,26 @@ class SiteFragment : Fragment() {
 //        }
 
         when (value) {
-            in 0..21 -> root.setBackgroundResource(R.color.color_green_L1)
-            in 21..22 -> root.setBackgroundResource(R.color.color_yellow_L2)
-            in 23..24 -> root.setBackgroundResource(R.color.color_orange_L3)
+            in 0..21 -> root.setCardBackgroundColor(resources.getColor(R.color.color_green_L1))
+            in 21..22 -> root.setCardBackgroundColor(resources.getColor(R.color.color_yellow_L2))
+            in 23..24 -> root.setCardBackgroundColor(resources.getColor(R.color.color_orange_L3))
             in 24..25 -> {
-                root.setBackgroundResource(R.color.color_red_L4)
-                siteName.setTextColor(getResources().getColor(R.color.color_white_word))
-                siteAqi.setTextColor(getResources().getColor(R.color.color_white_word))
+                root.setCardBackgroundColor(resources.getColor(R.color.color_red_L4))
+                siteName.setTextColor(resources.getColor(R.color.color_white_word))
+                siteAqi.setTextColor(resources.getColor(R.color.color_white_word))
             }
             in 28..30 -> {
-                root.setBackgroundResource(R.color.color_purple_L5)
-                siteName.setTextColor(getResources().getColor(R.color.color_white_word))
-                siteAqi.setTextColor(getResources().getColor(R.color.color_white_word))
+                root.setCardBackgroundColor(resources.getColor(R.color.color_purple_L5))
+                siteName.setTextColor(resources.getColor(R.color.color_white_word))
+                siteAqi.setTextColor(resources.getColor(R.color.color_white_word))
             }
             else -> {
-                root.setBackgroundResource(R.color.color_dark_purple_L6)
-                siteName.setTextColor(getResources().getColor(R.color.color_white_word))
-                siteAqi.setTextColor(getResources().getColor(R.color.color_white_word))
+                root.setCardBackgroundColor(resources.getColor(R.color.color_dark_purple_L6))
+                siteName.setTextColor(resources.getColor(R.color.color_white_word))
+                siteAqi.setTextColor(resources.getColor(R.color.color_white_word))
             }
         }
+
     }
 
 }

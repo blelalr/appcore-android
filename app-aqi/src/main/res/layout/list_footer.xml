@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,18 +7,18 @@
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
     android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    android:paddingBottom="16dp">
     <androidx.cardview.widget.CardView
-        android:id="@+id/list_item_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/color_bg_white"
+        android:id="@+id/list_footer_root"
         android:layout_margin="4dp"
         android:foreground="?android:attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="8dp"
-        app:cardElevation="3dp">
+        app:cardElevation="2dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,24 +27,22 @@
             android:paddingEnd="22dp">
 
             <TextView
-                android:id="@+id/tv_site_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:textSize="25dp"
-                android:textColor="@color/color_black_word"
+                android:textSize="22dp"
+                android:textColor="@color/color_bg_black"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="台北" />
+                android:text="添加觀測站" />
 
-            <TextView
-                android:id="@+id/tv_aqi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="end"
                 android:textSize="20dp"
-                android:textColor="@color/color_black_word"
+                android:src="@drawable/ic_add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

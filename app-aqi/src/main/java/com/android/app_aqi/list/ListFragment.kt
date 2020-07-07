@@ -6,12 +6,15 @@ import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
+import com.android.app_aqi.add.SiteListDialogFragment
 import com.android.app_aqi.main.MainActivity
 
 /**
@@ -88,18 +91,29 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
                         ?: return
 
                 // Map the first shared element name to the child ImageView.
-                sharedElements!![names!![0]]= selectedViewHolder.itemView.findViewById(R.id.item_root)
+                sharedElements!![names!![0]]= selectedViewHolder.itemView.findViewById(R.id.list_item_root)
             }
         })
     }
 
     private fun initRecyclerView() {
         listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        listRecyclerView.adapter = SiteListAdapter((activity as MainActivity).sharedViewModel.siteList, this)
+        listRecyclerView.adapter = SiteListAdapter(sharedViewModel.siteList, this)
     }
 
     override fun onItemClick(itemView: View, position: Int) {
         listenerList?.onListItemClick(itemView, position)
+    }
+
+    override fun onAddClick(footRoot: CardView) {
+        val ft: FragmentTransaction = childFragmentManager.beginTransaction()
+        val prev = childFragmentManager.findFragmentByTag(SiteListDialogFragment::class.simpleName)
+        if (prev != null) {
+            ft.remove(prev)
+        }
+        ft.addToBackStack(null)
+        val dialogFragment = SiteListDialogFragment()
+        dialogFragment.show(ft, SiteListDialogFragment::class.simpleName)
     }
 
     override fun onAttach(context: Context) {

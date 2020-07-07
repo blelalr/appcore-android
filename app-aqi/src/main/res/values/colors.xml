@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorPrimary">#F8FFF8</color>
+    <color name="colorPrimaryDark">#414444</color>
+    <color name="colorAccent">#A7DA99</color>
 
     <color name="color_green_L1">#A7DA99</color>
     <color name="color_yellow_L2">#FFE66D</color>
@@ -15,4 +15,5 @@
     <color name="color_bottom_app_bar_bg">#C1D4D1</color>
     <color name="color_bg_black">#3E4347</color>
     <color name="color_bg_white">#F5F5F5</color>
+    <color name="color_bg_fab">#CCCCCC</color>
 </resources>
