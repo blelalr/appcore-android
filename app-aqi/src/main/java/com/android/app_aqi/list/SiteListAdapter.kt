@@ -32,11 +32,11 @@ class SiteListAdapter(private val siteList : List<SiteModel>, private val listen
     }
 
     override fun getItemCount(): Int {
-        return 3 + mFooterCount
+        return siteList.size + mFooterCount
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if(mFooterCount!= 0 && position > 3 - 1 ) {
+        return if(mFooterCount!= 0 && position > siteList.size - 1 ) {
             ITEM_TYPE_FOOTER
         } else {
             ITEM_TYPE_CONTENT

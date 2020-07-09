@@ -3,12 +3,14 @@ package com.android.app_aqi.list
 import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -97,8 +99,10 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     }
 
     private fun initRecyclerView() {
-        listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        listRecyclerView.adapter = SiteListAdapter(sharedViewModel.siteList, this)
+        sharedViewModel.followedSiteList.observe(this.viewLifecycleOwner, Observer {
+            listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            listRecyclerView.adapter = SiteListAdapter(it, this)
+        })
     }
 
     override fun onItemClick(itemView: View, position: Int) {

@@ -1,9 +1,6 @@
 package com.android.app_aqi.room
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.android.app_aqi.model.AqiModel
 import com.android.app_aqi.model.SiteModel
 
@@ -21,6 +18,9 @@ interface AqiDao {
 
     @Query("SELECT siteId, siteName, county ,longitude, latitude, aqi, max(publishTime)  FROM AQI WHERE siteId IN (:followedSites) GROUP by siteId")
     fun getAllFollowSite(followedSites: List<String>): List<SiteModel>
+
+    @Query("SELECT siteId, siteName, county ,longitude, latitude, aqi, max(publishTime)  FROM AQI WHERE siteId= :followedSiteId GROUP by siteId")
+    fun getFollowSiteById(followedSiteId: String): SiteModel
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(aqi: AqiModel): Long

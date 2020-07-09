@@ -1,17 +1,19 @@
 package com.android.app_aqi.main
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import com.android.app_aqi.Constant
 import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.home.HomeFragment
 import com.android.app_aqi.list.ListFragment
+import com.android.app_aqi.model.SiteModel
 import com.android.app_aqi.room.AqiDatabase
-import com.google.android.material.bottomappbar.BottomAppBar
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, HomeFragment.OnMenuItemClickListener {
@@ -25,18 +27,37 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, 
     }
 
     private fun initData() {
+        //find all follow site
+        val sharedPreferences = getSharedPreferences(Constant.SHARE_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val setFromSharedPreferences = sharedPreferences.getStringSet(Constant.FOLLOWED_SITE_LIST, mutableSetOf())
+        if(setFromSharedPreferences.isNullOrEmpty()) {
+            val copyOfSet = setFromSharedPreferences!!.toMutableSet()
+            copyOfSet.add("12")
+
+            val editor = sharedPreferences.edit()
+            editor.putStringSet(Constant.FOLLOWED_SITE_LIST, copyOfSet)
+            editor.apply() // or commit() if really needed
+        }
+
+        sharedViewModel.followedSet = sharedPreferences.getStringSet(Constant.FOLLOWED_SITE_LIST, mutableSetOf())!!
+
         val aqiDatabase = Room.databaseBuilder(applicationContext!!, AqiDatabase::class.java, AqiDatabase.DATABASE_NAME)
                 .allowMainThreadQueries()
                 .build()
         GlobalScope.launch {
+            var followList: MutableList<SiteModel>  = mutableListOf()
+            for( followSiteId in sharedViewModel.followedSet) {
+                followList.add(aqiDatabase.getAqiDao().getFollowSiteById(followSiteId))
+            }
+            sharedViewModel.followedSiteList.postValue(followList)
             sharedViewModel.siteList = aqiDatabase.getAqiDao().getSiteList()
-            replaceByHomeFragment(null)
         }
         aqiDatabase.close()
+
+        replaceByHomeFragment(null)
     }
 
     private fun replaceByListFragment(itemView: View) {
-        Log.d("esther", "replaceByListFragment${itemView.transitionName}")
         if(supportFragmentManager.backStackEntryCount > 0) {
             supportFragmentManager.popBackStack()
         } else {
@@ -58,7 +79,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, 
             if(supportFragmentManager.backStackEntryCount > 0) {
                 supportFragmentManager.popBackStack()
             } else {
-                Log.d("esther", "replaceByHomeFragment${itemView.transitionName}")
                 supportFragmentManager
                         .beginTransaction()
                         .addSharedElement(itemView, itemView.transitionName)

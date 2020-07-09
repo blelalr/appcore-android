@@ -1,18 +1,23 @@
 package com.android.app_aqi.add
 
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
+import com.android.app_aqi.Constant
 import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.model.SiteModel
+import com.android.app_aqi.room.AqiDatabase
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  *
@@ -31,31 +36,38 @@ class SiteListDialogFragment : BottomSheetDialogFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         sharedViewModel = ViewModelProvider(requireParentFragment().requireActivity()).get(SharedViewModel::class.java)
         view.findViewById<RecyclerView>(R.id.list)?.layoutManager = LinearLayoutManager(context)
-        view.findViewById<RecyclerView>(R.id.list)?.adapter = SiteAdapter(siteList = sharedViewModel.siteList)
+        view.findViewById<RecyclerView>(R.id.list)?.adapter = SiteListItemAdapter(sharedViewModel)
     }
 
-    private inner class ViewHolder internal constructor(inflater: LayoutInflater, parent: ViewGroup)
-        : RecyclerView.ViewHolder(inflater.inflate(R.layout.fragment_site_list_dialog_list_dialog_item, parent, false)) {
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
 
-        internal val text: TextView = itemView.findViewById(R.id.text)
-    }
-
-    private inner class SiteAdapter internal constructor(private val siteList: List<SiteModel>)  : RecyclerView.Adapter<ViewHolder>() {
-
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            return ViewHolder(LayoutInflater.from(parent.context), parent)
+        //refresh all follow site
+        val sharedPreferences = requireActivity().getSharedPreferences(Constant.SHARE_PREFERENCE_NAME, Context.MODE_PRIVATE)
+        val setFromSharedPreferences = sharedPreferences.getStringSet(Constant.FOLLOWED_SITE_LIST, mutableSetOf())
+        val copyOfSet = setFromSharedPreferences!!.toMutableSet()
+        for( followSiteId in sharedViewModel.followedSet) {
+            copyOfSet.add(followSiteId)
         }
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.putStringSet(Constant.FOLLOWED_SITE_LIST, copyOfSet)
+        editor.apply() // or commit() if really needed
 
-        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            holder.text.text = siteList[position].siteName
-        }
 
-        override fun getItemCount(): Int {
-            return siteList.size
+        val aqiDatabase = Room.databaseBuilder(requireParentFragment().requireActivity().applicationContext, AqiDatabase::class.java, AqiDatabase.DATABASE_NAME)
+                .allowMainThreadQueries()
+                .build()
+        GlobalScope.launch {
+            var followList: MutableList<SiteModel>  = mutableListOf()
+            for( followSiteId in sharedViewModel.followedSet) {
+                followList.add(aqiDatabase.getAqiDao().getFollowSiteById(followSiteId))
+            }
+            sharedViewModel.followedSiteList.postValue(followList)
         }
+        aqiDatabase.close()
     }
 
     companion object {
