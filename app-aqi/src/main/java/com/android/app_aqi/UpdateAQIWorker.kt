@@ -27,10 +27,10 @@ class UpdateAQIWorker(context: Context, workerParams: WorkerParameters) : Worker
                         .allowMainThreadQueries()
                         .build()
                 GlobalScope.launch {
-                    if(aqiDatabase.getAqiDao().getAll().isNullOrEmpty()){
+                    if(aqiDatabase.getAqiDao().getSiteList().isNullOrEmpty()){
                         Log.d("esther", "Database is Null Or Empty")
-                        result!!.forEach {aqi -> insertAqi(aqi)
-                            Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString())
+                        result!!.forEach {aqi -> //insertAqi(aqi)
+                            Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString() + " " +"AQI ${aqi.aQI}")
                             if(aqi.siteId.isNullOrEmpty() || aqi.publishTime.isNullOrEmpty()) return@forEach
                             val siteId = aqi.siteId.toLong()
                             val publishTime = DateUtil.DateToStamp(aqi.publishTime)
@@ -41,7 +41,7 @@ class UpdateAQIWorker(context: Context, workerParams: WorkerParameters) : Worker
                     } else {
                         result!!.forEach {aqi ->
                             if(aqiDatabase.getAqiDao().filterBySite(aqi.siteId, aqi.publishTime).isNotEmpty()) return@forEach
-                            Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString())
+                            Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString() + " " +"AQI ${aqi.aQI}")
                             if(aqi.siteId.isNullOrEmpty() || aqi.publishTime.isNullOrEmpty()) return@forEach
                             val siteId = aqi.siteId.toLong()
                             val publishTime = DateUtil.DateToStamp(aqi.publishTime)
@@ -55,9 +55,9 @@ class UpdateAQIWorker(context: Context, workerParams: WorkerParameters) : Worker
 
             }
 
-            private fun insertAqi(aqi: AqiModel) {
-
-            }
+//            private fun insertAqi(aqi: AqiModel) {
+//
+//            }
 
 
             override fun onFailed(error: ResponseBody?) {
