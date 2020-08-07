@@ -41,35 +41,6 @@ class SiteListDialogFragment : BottomSheetDialogFragment() {
         view.findViewById<RecyclerView>(R.id.list)?.adapter = SiteListItemAdapter(sharedViewModel)
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog)
-
-        //refresh all follow site
-        val sharedPreferences = requireActivity().getSharedPreferences(Constant.SHARE_PREFERENCE_NAME, Context.MODE_PRIVATE)
-        val setFromSharedPreferences = sharedPreferences.getStringSet(Constant.FOLLOWED_SITE_LIST, mutableSetOf())
-        val copyOfSet = setFromSharedPreferences!!.toMutableSet()
-        for( followSiteId in sharedViewModel.followedSet) {
-            copyOfSet.add(followSiteId)
-        }
-        val editor = sharedPreferences.edit()
-        editor.clear()
-        editor.putStringSet(Constant.FOLLOWED_SITE_LIST, copyOfSet)
-        editor.apply() // or commit() if really needed
-
-
-        val aqiDatabase = Room.databaseBuilder(requireParentFragment().requireActivity().applicationContext, AqiDatabase::class.java, AqiDatabase.DATABASE_NAME)
-                .allowMainThreadQueries()
-                .build()
-        GlobalScope.launch {
-            var followList: MutableList<SiteModel>  = mutableListOf()
-            for( followSiteId in sharedViewModel.followedSet) {
-                followList.add(aqiDatabase.getAqiDao().getFollowSiteById(followSiteId))
-            }
-            sharedViewModel.followedSiteList.postValue(followList)
-        }
-        aqiDatabase.close()
-    }
-
     companion object {
         fun newInstance(itemCount: Int): SiteListDialogFragment =
                 SiteListDialogFragment().apply {

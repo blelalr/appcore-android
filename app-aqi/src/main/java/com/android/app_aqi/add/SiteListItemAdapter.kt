@@ -1,6 +1,5 @@
 package com.android.app_aqi.add
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -10,9 +9,9 @@ import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.model.SiteModel
 
-class SiteListItemAdapter(sharedViewModel: SharedViewModel) : RecyclerView.Adapter<SiteListItemAdapter.ViewHolder>() {
-    private var siteList: List<SiteModel> = sharedViewModel.siteList
-    private var followedSet: MutableSet<String> = sharedViewModel.followedSet
+class SiteListItemAdapter(private val sharedViewModel: SharedViewModel) : RecyclerView.Adapter<SiteListItemAdapter.ViewHolder>() {
+    private var siteList: List<SiteModel> = sharedViewModel.getAllSiteList()
+    private var followedSet: MutableSet<String> = sharedViewModel.getAllFollowSiteSet()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context), parent)
     }
@@ -20,18 +19,21 @@ class SiteListItemAdapter(sharedViewModel: SharedViewModel) : RecyclerView.Adapt
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.setIsRecyclable(false)
         holder.text.text = siteList[position].siteName
-        holder.tbFollow.isChecked = followedSet.contains(siteList[position].siteId)
+        holder.tbFollow.isChecked = sharedViewModel.isFollow(siteList[position].siteId!!)
         holder.tbFollow.setOnCheckedChangeListener { _, isChecked ->
             siteList[position].siteId?.let {
                 if (isChecked) {
-                    followedSet.add(it)
+                    sharedViewModel.followSite(it)
+//                    followedSet.add(it)
                 }  else {
-                    followedSet.remove(it)
+                    sharedViewModel.unFollowSite(it)
+//                    followedSet.remove(it)
                 }
             }
             holder.tbFollow.isChecked = isChecked
         }
     }
+
 
     override fun getItemCount(): Int {
         return siteList.size

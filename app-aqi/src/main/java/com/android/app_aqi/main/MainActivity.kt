@@ -2,7 +2,6 @@ package com.android.app_aqi.main
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -27,33 +26,6 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, 
     }
 
     private fun initData() {
-        //find all follow site
-        val sharedPreferences = getSharedPreferences(Constant.SHARE_PREFERENCE_NAME, Context.MODE_PRIVATE)
-        val setFromSharedPreferences = sharedPreferences.getStringSet(Constant.FOLLOWED_SITE_LIST, mutableSetOf())
-        if(setFromSharedPreferences.isNullOrEmpty()) {
-            val copyOfSet = setFromSharedPreferences!!.toMutableSet()
-            copyOfSet.add("12")
-
-            val editor = sharedPreferences.edit()
-            editor.putStringSet(Constant.FOLLOWED_SITE_LIST, copyOfSet)
-            editor.apply() // or commit() if really needed
-        }
-
-        sharedViewModel.followedSet = sharedPreferences.getStringSet(Constant.FOLLOWED_SITE_LIST, mutableSetOf())!!
-
-        val aqiDatabase = Room.databaseBuilder(applicationContext!!, AqiDatabase::class.java, AqiDatabase.DATABASE_NAME)
-                .allowMainThreadQueries()
-                .build()
-        GlobalScope.launch {
-            var followList: MutableList<SiteModel>  = mutableListOf()
-            for( followSiteId in sharedViewModel.followedSet) {
-                followList.add(aqiDatabase.getAqiDao().getFollowSiteById(followSiteId))
-            }
-            sharedViewModel.followedSiteList.postValue(followList)
-            sharedViewModel.siteList = aqiDatabase.getAqiDao().getSiteList()
-        }
-        aqiDatabase.close()
-
         replaceByHomeFragment(null)
     }
 

@@ -4,11 +4,9 @@ package com.android.app_aqi.home
 import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -88,7 +86,7 @@ class HomeFragment : Fragment() {
 
 
     private fun initViewPager() {
-        sharedViewModel.followedSiteList.observe(this.viewLifecycleOwner, Observer {
+        sharedViewModel.getAllFollowSiteList().observe(this.viewLifecycleOwner, Observer {
             siteViewPagerAdapter = SiteViewPagerAdapter(siteList = it, fm = childFragmentManager)
             siteViewPager.adapter = siteViewPagerAdapter
             siteViewPager.currentItem = sharedViewModel.currentPos

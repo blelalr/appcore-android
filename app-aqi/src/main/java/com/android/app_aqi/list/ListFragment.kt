@@ -3,7 +3,6 @@ package com.android.app_aqi.list
 import android.content.Context
 import android.os.Bundle
 import android.transition.TransitionInflater
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.add.SiteListDialogFragment
-import com.android.app_aqi.main.MainActivity
 
 /**
  * A simple [Fragment] subclass.
@@ -99,7 +97,7 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     }
 
     private fun initRecyclerView() {
-        sharedViewModel.followedSiteList.observe(this.viewLifecycleOwner, Observer {
+        sharedViewModel.getAllFollowSiteList().observe(this.viewLifecycleOwner, Observer {
             listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             listRecyclerView.adapter = SiteListAdapter(it, this)
         })

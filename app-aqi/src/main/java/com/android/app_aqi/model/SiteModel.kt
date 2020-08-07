@@ -7,28 +7,28 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-@Entity(tableName = "AQI")
+@Entity(tableName = "FollowedSite")
 data class SiteModel @JvmOverloads constructor(
 
         @field:SerializedName("SiteName")
-        val siteName: String? = null,
+        var siteName: String? = null,
 
         @field:SerializedName("County")
-        val county: String? = null,
+        var county: String? = null,
 
         @field:SerializedName("AQI")
-        val aQI: String? = null,
+        var aQI: String? = null,
 
         @field:SerializedName("Longitude")
-        val longitude: String? = null,
+        var longitude: String? = null,
 
         @field:SerializedName("Latitude")
-        val latitude: String? = null,
+        var latitude: String? = null,
 
         @PrimaryKey(autoGenerate = false)
         @field:SerializedName("SiteId")
-        val siteId: String? = null,
+        var siteId: String? = null,
 
         @field:SerializedName("PublishTime")
-        val publishTime: String? = null
+        var publishTime: String? = null
 ) : Serializable

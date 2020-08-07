@@ -1,23 +1,28 @@
 package com.android.app_aqi
 
-import android.R
 import android.app.Application
 import android.content.ContentValues.TAG
 import android.util.Log
-import android.widget.Toast
-import androidx.annotation.NonNull
 import androidx.work.*
+import com.android.app_aqi.room.AqiDatabase
 import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
 import com.google.firebase.iid.FirebaseInstanceId
-import com.google.firebase.iid.InstanceIdResult
 import java.util.concurrent.TimeUnit
 
+lateinit var aqiDb: AqiDatabase
+lateinit var workManager: WorkManager
 
 class MyApplication : Application(), Configuration.Provider{
 
-    override fun onCreate() {
-        super.onCreate()
+    companion object {
+        lateinit var INSTANCE: MyApplication
+
+    }
+
+    init {
+        INSTANCE = this
+        aqiDb = AqiDatabase.getInstance(this)
+
         val constraint: Constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()
@@ -26,10 +31,15 @@ class MyApplication : Application(), Configuration.Provider{
                 .setConstraints(constraint)
                 .build()
 
-        val workManager = WorkManager.getInstance(this)
-
+        workManager = WorkManager.getInstance(this)
 
         workManager.enqueueUniquePeriodicWork(Constant.WORKER_NAME, ExistingPeriodicWorkPolicy.KEEP, workRequest)
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
+
 
         FirebaseInstanceId.getInstance().instanceId
                 .addOnCompleteListener(OnCompleteListener { task ->
