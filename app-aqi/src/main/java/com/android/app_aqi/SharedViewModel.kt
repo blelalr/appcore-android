@@ -24,8 +24,4 @@ class SharedViewModel(private val repositoryImpl: AqiRepository = AqiRepositoryI
         repositoryImpl.unFollowSite(siteId)
     }
 
-    fun updateFollowSiteList() {
-        getAllFollowSiteList()
-    }
-
 }

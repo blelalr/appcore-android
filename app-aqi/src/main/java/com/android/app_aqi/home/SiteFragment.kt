@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.android.app_aqi.R
+import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.model.SiteModel
 
 class SiteFragment : Fragment() {
@@ -23,8 +24,8 @@ class SiteFragment : Fragment() {
         }
     }
 
+    private lateinit var viewModel: SharedViewModel
     private lateinit var aqi: SiteModel
-    private lateinit var viewModel: SiteViewModel
     private lateinit var siteName: TextView
     private lateinit var siteAqi: TextView
     private lateinit var root: CardView
@@ -45,7 +46,7 @@ class SiteFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SiteViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
         aqi = arguments!!.getSerializable(SiteModel::class.simpleName) as SiteModel
         siteName.text = aqi.siteName

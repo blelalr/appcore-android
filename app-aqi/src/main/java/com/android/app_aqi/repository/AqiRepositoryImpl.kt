@@ -18,6 +18,7 @@ import kotlin.concurrent.thread
 class AqiRepositoryImpl : AqiRepository {
     private val aqiDao: AqiDao = aqiDb.aqiDao()
     private lateinit var aqiDataTask: AqiDataTask
+
     override fun getAllSiteList(): LiveData<List<SiteModel>> {
         val data = MutableLiveData<List<SiteModel>>()
         var allSiteList : List<SiteModel> = mutableListOf()
@@ -119,7 +120,7 @@ class AqiRepositoryImpl : AqiRepository {
     override fun isFollowed(siteId: String): Boolean {
         var isFollow = false
         thread {
-            isFollow = aqiDao.getIsFollow(siteId)
+            isFollow = aqiDao.isFollow(siteId)
         }
         return isFollow
     }

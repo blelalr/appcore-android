@@ -12,7 +12,7 @@ class AqiDataTask : TaskService{
         fun onFailed(error: ResponseBody?)
     }
 
-    var taskListener : TaskListener
+    private var taskListener : TaskListener
 
     constructor(listener: TaskListener, request: RequestEntity) {
         this.taskListener = listener

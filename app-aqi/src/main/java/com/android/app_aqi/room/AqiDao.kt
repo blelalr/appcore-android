@@ -34,6 +34,6 @@ interface AqiDao {
     fun unFollowSite(siteId: String)
 
     @Query("SELECT isFollow FROM ALL_SITE WHERE siteId = :siteId")
-    fun getIsFollow(siteId: String): Boolean
+    fun isFollow(siteId: String): Boolean
 
 }
