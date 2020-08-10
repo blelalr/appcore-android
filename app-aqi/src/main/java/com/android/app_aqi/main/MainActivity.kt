@@ -1,20 +1,16 @@
 package com.android.app_aqi.main
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
-import com.android.app_aqi.Constant
 import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.home.HomeFragment
 import com.android.app_aqi.list.ListFragment
-import com.android.app_aqi.model.SiteModel
-import com.android.app_aqi.room.AqiDatabase
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.google.firebase.encoders.ObjectEncoder
+
 class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, HomeFragment.OnMenuItemClickListener {
     lateinit var sharedViewModel : SharedViewModel
 
@@ -26,7 +22,9 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, 
     }
 
     private fun initData() {
-        replaceByHomeFragment(null)
+        sharedViewModel.getAllSiteList().observe(this, Observer {
+            replaceByHomeFragment(null)
+        })
     }
 
     private fun replaceByListFragment(itemView: View) {

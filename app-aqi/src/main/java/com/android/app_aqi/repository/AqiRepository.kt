@@ -5,16 +5,18 @@ import com.android.app_aqi.model.SiteModel
 
 interface AqiRepository {
 
-    fun getAllSiteList(): List<SiteModel>
+    fun getAllSiteList(): LiveData<List<SiteModel>>
 
     fun getAllFollowedSite(): LiveData<List<SiteModel>>
 
-    fun followSite(site: SiteModel)
+    fun followSite(site: String)
 
-    fun unFollowSite(siteId: Int)
+    fun unFollowSite(siteId: String)
 
     fun insertAqiData()
 
-    fun isFollow(siteId: String): Boolean
+    fun isFollowed(siteId: String): Boolean
+
+    fun updateFollowSiteList()
 
 }

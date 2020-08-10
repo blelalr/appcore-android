@@ -7,33 +7,33 @@ import com.android.app_aqi.model.SiteModel
 @Dao
 interface AqiDao {
 
+    //TABLE AQI
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertAqi(aqi: AqiModel)
+
     @Query("SELECT * FROM AQI")
     fun getAll(): List<AqiModel>
+
     @Query("SELECT * FROM AQI WHERE siteId= :siteId AND publishTime= :publishTime")
     fun filterBySite(siteId: String?, publishTime: String?): List<AqiModel>
-//
-    @Query("SELECT siteId, siteName, county ,longitude, latitude, aqi, MAX(publishTime) FROM AQI GROUP by siteId")
-    fun getAllSiteList(): List<SiteModel>
-//
-//
 
+    //TABLE ALL_SITE
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAqi(aqi: AqiModel): Long
+    fun insertSite(it: SiteModel)
 
+    @Query("SELECT * FROM ALL_SITE")
+    fun getAllSite(): List<SiteModel>
 
-    //Table FollowSite
-    @Query("SELECT * FROM FollowedSite")
+    @Query("SELECT * FROM ALL_SITE WHERE isFollow")
     fun getAllFollowSite(): List<SiteModel>
 
-    @Query("SELECT * FROM FollowedSite WHERE siteId= :followedSiteId")
-    fun getFollowSiteById(followedSiteId: String): SiteModel
+    @Query("UPDATE ALL_SITE SET isFollow = 1  WHERE siteId=:siteId")
+    fun followSite(siteId: String)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun followSite(site: SiteModel): Long
+    @Query("UPDATE ALL_SITE SET isFollow = 0  WHERE siteId=:siteId")
+    fun unFollowSite(siteId: String)
 
-    @Query("DELETE FROM FollowedSite WHERE siteId = :id")
-    fun unFollowSite(id: Int?)
-
-
+    @Query("SELECT isFollow FROM ALL_SITE WHERE siteId = :siteId")
+    fun getIsFollow(siteId: String): Boolean
 
 }

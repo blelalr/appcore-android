@@ -15,8 +15,6 @@ import java.util.concurrent.TimeUnit
 
 
 class ApiServiceBuilder {
-
-    private lateinit var response: Response<List<AqiModel>>
     private val apiService : ApiService
 
     init {
@@ -36,10 +34,7 @@ class ApiServiceBuilder {
         apiService = retrofit.create(ApiService::class.java)
     }
 
-    fun get(@QueryMap params: Map<String, String>): Response<List<AqiModel>> {
-        CoroutineScope(Dispatchers.IO).launch {
-            response = apiService.get(params)
-        }
-        return response
+    suspend fun get(@QueryMap params: Map<String, String>): Response<List<AqiModel>> {
+        return apiService.get(params)
     }
 }

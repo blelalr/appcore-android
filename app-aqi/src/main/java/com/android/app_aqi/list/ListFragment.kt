@@ -1,8 +1,10 @@
 package com.android.app_aqi.list
 
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.transition.TransitionInflater
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,20 +34,17 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         exitTransition = TransitionInflater.from(context).inflateTransition(R.transition.list_to_pager_exit_transition)
         sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        var view = inflater.inflate(R.layout.fragment_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_list, container, false)
         listRecyclerView = view.findViewById(R.id.rv_list)
         return view
     }
-
 
     /**
      * Scrolls the recycler view to show the last viewed item in the grid. This is important when
@@ -78,8 +77,6 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
-        scrollToPosition()
-        prepareTransitions()
     }
 
     private fun prepareTransitions() {
@@ -99,7 +96,10 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     private fun initRecyclerView() {
         sharedViewModel.getAllFollowSiteList().observe(this.viewLifecycleOwner, Observer {
             listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            listRecyclerView.adapter?.notifyDataSetChanged()
             listRecyclerView.adapter = SiteListAdapter(it, this)
+            scrollToPosition()
+            prepareTransitions()
         })
     }
 
@@ -108,13 +108,16 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     }
 
     override fun onAddClick(footRoot: CardView) {
-        val ft: FragmentTransaction = childFragmentManager.beginTransaction()
-        val prev = childFragmentManager.findFragmentByTag(SiteListDialogFragment::class.simpleName)
+        val ft: FragmentTransaction = parentFragmentManager.beginTransaction()
+        val prev = parentFragmentManager.findFragmentByTag(SiteListDialogFragment::class.simpleName)
         if (prev != null) {
             ft.remove(prev)
         }
         ft.addToBackStack(null)
         val dialogFragment = SiteListDialogFragment()
+        dialogFragment.setOnDismissListener(DialogInterface.OnDismissListener {
+            initRecyclerView()
+        })
         dialogFragment.show(ft, SiteListDialogFragment::class.simpleName)
     }
 

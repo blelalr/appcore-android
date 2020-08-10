@@ -48,7 +48,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAppbar()
         initViewPager()
-        prepareTransitions()
     }
 
     private fun prepareTransitions() {
@@ -58,8 +57,7 @@ class HomeFragment : Fragment() {
                 // visible). To locate the fragment, call instantiateItem with the selection position.
                 // At this stage, the method will simply return the fragment at the position and will
                 // not create a new one.
-                val currentFragment = siteViewPagerAdapter
-                        .instantiateItem(siteViewPager, sharedViewModel.currentPos) as Fragment
+                val currentFragment = siteViewPagerAdapter.instantiateItem(siteViewPager, sharedViewModel.currentPos) as Fragment
                 val view = currentFragment.view ?: return
 
                 // Map the first shared element name to the child ImageView.
@@ -95,6 +93,7 @@ class HomeFragment : Fragment() {
                     sharedViewModel.currentPos = position
                 }
             })
+            prepareTransitions()
         })
     }
 

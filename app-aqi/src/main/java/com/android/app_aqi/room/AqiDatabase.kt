@@ -14,7 +14,7 @@ abstract class AqiDatabase : RoomDatabase(){
 
     companion object {
         private val lock = Any()
-        const val DATABASE_NAME = "aqi_database"
+        private const val DATABASE_NAME = "aqi_database"
         private var INSTANCE: AqiDatabase? = null
 
         fun getInstance(application: Application): AqiDatabase {

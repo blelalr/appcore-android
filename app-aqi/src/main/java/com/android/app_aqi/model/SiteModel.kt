@@ -7,9 +7,13 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 
-@Entity(tableName = "FollowedSite")
+@Entity(tableName = "ALL_SITE")
 data class SiteModel @JvmOverloads constructor(
-
+        
+        @PrimaryKey(autoGenerate = false)
+        @field:SerializedName("SiteId")
+        var siteId: String,
+        
         @field:SerializedName("SiteName")
         var siteName: String? = null,
 
@@ -24,11 +28,10 @@ data class SiteModel @JvmOverloads constructor(
 
         @field:SerializedName("Latitude")
         var latitude: String? = null,
-
-        @PrimaryKey(autoGenerate = false)
-        @field:SerializedName("SiteId")
-        var siteId: String? = null,
-
+        
         @field:SerializedName("PublishTime")
-        var publishTime: String? = null
+        var publishTime: String? = null,
+
+        @field:SerializedName("isFollow")
+        var isFollow: Boolean? = null
 ) : Serializable

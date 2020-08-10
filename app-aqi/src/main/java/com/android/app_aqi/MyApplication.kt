@@ -21,7 +21,14 @@ class MyApplication : Application(), Configuration.Provider{
 
     init {
         INSTANCE = this
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+
         aqiDb = AqiDatabase.getInstance(this)
+
+        INSTANCE = this
 
         val constraint: Constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -34,25 +41,19 @@ class MyApplication : Application(), Configuration.Provider{
         workManager = WorkManager.getInstance(this)
 
         workManager.enqueueUniquePeriodicWork(Constant.WORKER_NAME, ExistingPeriodicWorkPolicy.KEEP, workRequest)
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-
 
 
         FirebaseInstanceId.getInstance().instanceId
-                .addOnCompleteListener(OnCompleteListener { task ->
-                    if (!task.isSuccessful) {
-                        Log.w(TAG, "getInstanceId failed", task.exception)
-                        return@OnCompleteListener
-                    }
+            .addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w(TAG, "getInstanceId failed", task.exception)
+                    return@OnCompleteListener
+                }
 
-                    // Get new Instance ID token
-                    val token = task.result?.token
-                    Log.d(TAG, token)
-                })
-
+                // Get new Instance ID token
+                val token = task.result?.token
+                Log.d(TAG, token)
+            })
     }
 
     override fun getWorkManagerConfiguration(): Configuration
