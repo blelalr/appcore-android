@@ -77,6 +77,8 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecyclerView()
+        scrollToPosition()
+        prepareTransitions()
     }
 
     private fun prepareTransitions() {
@@ -94,13 +96,11 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     }
 
     private fun initRecyclerView() {
-        sharedViewModel.getAllFollowSiteList().observe(this.viewLifecycleOwner, Observer {
+        sharedViewModel.allFollowedSite.value?.let{
             listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             listRecyclerView.adapter?.notifyDataSetChanged()
             listRecyclerView.adapter = SiteListAdapter(it, this)
-            scrollToPosition()
-            prepareTransitions()
-        })
+        }
     }
 
     override fun onItemClick(itemView: View, position: Int) {

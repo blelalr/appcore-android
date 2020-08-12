@@ -48,6 +48,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initAppbar()
         initViewPager()
+        prepareTransitions()
     }
 
     private fun prepareTransitions() {
@@ -84,8 +85,8 @@ class HomeFragment : Fragment() {
 
 
     private fun initViewPager() {
-        sharedViewModel.getAllFollowSiteList().observe(this.viewLifecycleOwner, Observer {
-            siteViewPagerAdapter = SiteViewPagerAdapter(siteList = it, fm = childFragmentManager)
+        sharedViewModel.allFollowedSite.value?.let {
+            siteViewPagerAdapter = SiteViewPagerAdapter(it , fm = childFragmentManager)
             siteViewPager.adapter = siteViewPagerAdapter
             siteViewPager.currentItem = sharedViewModel.currentPos
             siteViewPager.addOnPageChangeListener(object : SimpleOnPageChangeListener() {
@@ -93,8 +94,7 @@ class HomeFragment : Fragment() {
                     sharedViewModel.currentPos = position
                 }
             })
-            prepareTransitions()
-        })
+        }
     }
 
 

@@ -1,6 +1,7 @@
 package com.android.app_aqi.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -23,7 +24,9 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, 
 
     private fun initData() {
         sharedViewModel.getAllSiteList().observe(this, Observer {
-            replaceByHomeFragment(null)
+            sharedViewModel.getAllFollowSiteList().observe(this, Observer {
+                replaceByHomeFragment(null)
+            })
         })
     }
 

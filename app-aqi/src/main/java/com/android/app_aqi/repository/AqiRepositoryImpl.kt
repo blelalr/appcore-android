@@ -88,23 +88,24 @@ class AqiRepositoryImpl : AqiRepository {
     }
 
     override fun insertAqiData() {
-        aqiDataTask = AqiDataTask(object : AqiDataTask.TaskListener {
+
+            aqiDataTask = AqiDataTask(object : AqiDataTask.TaskListener {
             override fun onSucceed(result: List<AqiModel>?) {
-                result!!.forEach {aqi ->
-                    if(aqiDao.getAll().isNullOrEmpty()) {
-                        if(aqi.siteId.isNullOrEmpty() || aqi.publishTime.isNullOrEmpty()) return@forEach
-                        val siteId = aqi.siteId.toLong()
-                        val publishTime = DateUtil.DateToStamp(aqi.publishTime)
-                        aqi.id = siteId + publishTime
-                        aqiDao.insertAqi(aqi)
+                result!!.forEach { aqi ->
+                    //有資料時,表示有重複的資料
+                    if(aqiDao.getAll().isNotEmpty() && aqiDao.filterBySite(aqi.siteId, aqi.publishTime).isNotEmpty()) {
+                        Log.d("esther", "有重複的資料")
+                        return
+                    }
+                    if (aqi.siteId.isNullOrEmpty() || aqi.publishTime.isNullOrEmpty()) {
+                        Log.d("esther", "siteId null or publishTime null")
+                        return@forEach
                     } else {
-                        if(aqiDao.filterBySite(aqi.siteId, aqi.publishTime).isNullOrEmpty()) return@forEach  //表示有重複的資料
-                        Log.d("esther", "insert! : " +aqi.siteName +"  "+ aqi.publishTime.toString() + " " +"AQI ${aqi.aQI}")
-                        if(aqi.siteId.isNullOrEmpty() || aqi.publishTime.isNullOrEmpty()) return@forEach
                         val siteId = aqi.siteId.toLong()
                         val publishTime = DateUtil.DateToStamp(aqi.publishTime)
                         aqi.id = siteId + publishTime
                         aqiDao.insertAqi(aqi)
+                        Log.d("esther", "insert! : " + aqi.siteName + "  " + aqi.publishTime.toString() + " " + "AQI ${aqi.aQI}")
                     }
                 }
             }
