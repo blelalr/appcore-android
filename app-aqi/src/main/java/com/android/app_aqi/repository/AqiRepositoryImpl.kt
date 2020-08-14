@@ -59,7 +59,8 @@ class AqiRepositoryImpl : AqiRepository {
                     tempSite.publishTime = it.publishTime
                     tempSite.isFollow = it.siteId.equals("12")
                     aqiDao.insertSite(tempSite)
-                    defaultSiteList.add(tempSite)
+                    if(tempSite.isFollow!!)
+                        defaultSiteList.add(tempSite)
                     Log.d("esther", "add $tempSite")
                 }
                 followSiteList.postValue(defaultSiteList)

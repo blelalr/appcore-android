@@ -8,7 +8,7 @@ import retrofit2.http.QueryMap
 @JvmSuppressWildcards
 interface ApiService {
 
-    @GET("AQI")
+    @GET("webapi/Data/REWIQA")
     suspend fun get(@QueryMap params: Map<String, String>): Response<List<AqiModel>>
 
 }
