@@ -8,8 +8,8 @@ import okhttp3.ResponseBody
 class AqiDataTask : TaskService{
 
     interface TaskListener {
-        fun  onSucceed(result: List<AqiModel>?)
-        fun onFailed(error: ResponseBody?)
+        fun  onSucceed(result: List<AqiModel>)
+        fun onFailed(error: ResponseBody)
     }
 
     private var taskListener : TaskListener
@@ -20,7 +20,7 @@ class AqiDataTask : TaskService{
         this.request = request
     }
 
-    override fun onTaskSucceed(result: Any?) {
+    override fun onTaskSucceed(result: Any) {
         if(result != null) {
             var response : List<AqiModel> = result.convert()
             taskListener.onSucceed(response)
@@ -30,7 +30,7 @@ class AqiDataTask : TaskService{
         }
     }
 
-    override fun onTaskFailed(error: Any?) {
+    override fun onTaskFailed(error: Any) {
         var response : ResponseBody = error.convert()
         taskListener.onFailed(response)
     }

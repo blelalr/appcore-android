@@ -1,7 +1,6 @@
 package com.android.app_aqi.list
 
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
 import android.transition.TransitionInflater
 import android.util.Log
@@ -18,17 +17,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.add.SiteListDialogFragment
+import com.android.app_aqi.model.SiteModel
 
 /**
  * A simple [Fragment] subclass.
  * Activities that contain this fragment must implement the
- * [ListFragment.OnListItemClickListener] interface
+ * [ListFragment.ListItemListener] interface
  * to handle interaction events.
  * Use the [ListFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
-    private var listenerList: OnListItemClickListener? = null
+class ListFragment : Fragment(), SiteListAdapter.ItemClickListener , SiteListDialogFragment.DismissListener{
+    private var listenerListItem: ListItemListener? = null
     private lateinit var listRecyclerView :RecyclerView
     private lateinit var sharedViewModel : SharedViewModel
 
@@ -96,15 +96,14 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
     }
 
     private fun initRecyclerView() {
-        sharedViewModel.allFollowedSite.value?.let{
-            listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            listRecyclerView.adapter?.notifyDataSetChanged()
+        listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        sharedViewModel.followedSite?.let{
             listRecyclerView.adapter = SiteListAdapter(it, this)
         }
     }
 
     override fun onItemClick(itemView: View, position: Int) {
-        listenerList?.onListItemClick(itemView, position)
+        listenerListItem?.onListItemClick(itemView, position)
     }
 
     override fun onAddClick(footRoot: CardView) {
@@ -115,16 +114,14 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
         }
         ft.addToBackStack(null)
         val dialogFragment = SiteListDialogFragment()
-        dialogFragment.setOnDismissListener(DialogInterface.OnDismissListener {
-            initRecyclerView()
-        })
+        dialogFragment.setOnDismissListener(this)
         dialogFragment.show(ft, SiteListDialogFragment::class.simpleName)
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnListItemClickListener) {
-            listenerList = context
+        if (context is ListItemListener) {
+            listenerListItem = context
         } else {
             throw RuntimeException("$context must implement OnListItemClickListener")
         }
@@ -132,16 +129,24 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener {
 
     override fun onDetach() {
         super.onDetach()
-        listenerList = null
+        listenerListItem = null
     }
 
 
-    interface OnListItemClickListener {
+    interface ListItemListener {
         fun onListItemClick(itemView: View, position: Int)
     }
 
     companion object {
         @JvmStatic
         fun newInstance() = ListFragment()
+    }
+
+    override fun onDismiss() {
+        sharedViewModel.getFollowSiteList().observe(this.viewLifecycleOwner, Observer {
+            sharedViewModel.followedSite = mutableListOf()
+            sharedViewModel.followedSite = it
+            initRecyclerView()
+        })
     }
 }

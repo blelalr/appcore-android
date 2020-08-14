@@ -2,7 +2,6 @@ package com.android.app_aqi.add
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +11,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
+import com.android.app_aqi.list.ListFragment
+import com.android.app_aqi.model.SiteModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 /**
@@ -24,34 +25,38 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
  * </pre>
  */
 class SiteListDialogFragment : BottomSheetDialogFragment() {
+    private lateinit var siteListItemAdapter: SiteListItemAdapter
     private lateinit var rvAllSite: RecyclerView
     private lateinit var sharedViewModel : SharedViewModel
-    private var onDismissListener: DialogInterface.OnDismissListener? = null
+    private var onDismissListener: DismissListener? = null
 
-    fun setOnDismissListener(onDismissListener: DialogInterface.OnDismissListener?) {
+    fun setOnDismissListener(onDismissListener: DismissListener?) {
         this.onDismissListener = onDismissListener
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         return inflater.inflate(R.layout.fragment_site_list_dialog_list_dialog, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         rvAllSite = view.findViewById(R.id.list)
         rvAllSite.layoutManager = LinearLayoutManager(context)
-
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         sharedViewModel.getAllSiteList().observe(this.viewLifecycleOwner, Observer {
-            rvAllSite.adapter?.notifyDataSetChanged()
-            rvAllSite.adapter = SiteListItemAdapter(it, sharedViewModel)
+            sharedViewModel.allSite = mutableListOf()
+            sharedViewModel.allSite = it
+            siteListItemAdapter = SiteListItemAdapter(sharedViewModel.allSite, sharedViewModel)
+            rvAllSite.adapter = siteListItemAdapter
+
+
         })
     }
 
     override fun onDismiss(dialog: DialogInterface) {
-        super.onDismiss(dialog!!)
+        super.onDismiss(dialog)
         if (onDismissListener != null) {
-            onDismissListener!!.onDismiss(dialog)
+            onDismissListener?.onDismiss()
         }
     }
 
@@ -64,4 +69,10 @@ class SiteListDialogFragment : BottomSheetDialogFragment() {
                 }
 
     }
+
+
+    interface DismissListener {
+        fun onDismiss()
+    }
+
 }

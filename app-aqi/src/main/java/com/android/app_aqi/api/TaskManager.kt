@@ -1,6 +1,5 @@
 package com.android.app_aqi.api
 
-import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,13 +17,16 @@ class TaskManager {
             val response = apiServiceBuilder.get(taskService.params)
             // To get aqi response object
             if (response.isSuccessful) {
-                Log.d("esther", response.body().toString())
-                taskService.onTaskSucceed(response.body())
+                response.body()?.let {
+                    taskService.onTaskSucceed(it)
+                }
             // Handle errors here
             } else {
-                Log.d("esther", response.errorBody().toString())
-                taskService.onTaskFailed(response.errorBody())
+                response.errorBody()?.let {
+                    taskService.onTaskFailed(it)
+                }
             }
         }
+
     }
 }

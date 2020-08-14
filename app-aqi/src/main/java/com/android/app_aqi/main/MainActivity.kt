@@ -1,7 +1,6 @@
 package com.android.app_aqi.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -10,9 +9,8 @@ import com.android.app_aqi.R
 import com.android.app_aqi.SharedViewModel
 import com.android.app_aqi.home.HomeFragment
 import com.android.app_aqi.list.ListFragment
-import com.google.firebase.encoders.ObjectEncoder
 
-class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, HomeFragment.OnMenuItemClickListener {
+class MainActivity : AppCompatActivity(), ListFragment.ListItemListener, HomeFragment.OnMenuItemClickListener {
     lateinit var sharedViewModel : SharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,10 +21,10 @@ class MainActivity : AppCompatActivity(), ListFragment.OnListItemClickListener, 
     }
 
     private fun initData() {
-        sharedViewModel.getAllSiteList().observe(this, Observer {
-            sharedViewModel.getAllFollowSiteList().observe(this, Observer {
-                replaceByHomeFragment(null)
-            })
+        sharedViewModel.getFollowSiteList().observe(this, Observer {
+            sharedViewModel.followedSite = mutableListOf()
+            sharedViewModel.followedSite = it
+            replaceByHomeFragment(null)
         })
     }
 

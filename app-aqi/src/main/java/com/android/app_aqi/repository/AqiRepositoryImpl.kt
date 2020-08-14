@@ -18,41 +18,39 @@ import kotlin.concurrent.thread
 class AqiRepositoryImpl : AqiRepository {
     private val aqiDao: AqiDao = aqiDb.aqiDao()
     private lateinit var aqiDataTask: AqiDataTask
-
+    private lateinit var followSiteList: MutableLiveData<List<SiteModel>>
+    private lateinit var allSiteList: MutableLiveData<List<SiteModel>>
+    private lateinit var defaultSiteList: MutableList<SiteModel>
     override fun getAllSiteList(): LiveData<List<SiteModel>> {
-        val data = MutableLiveData<List<SiteModel>>()
-        var allSiteList : List<SiteModel> = mutableListOf()
+        allSiteList = MutableLiveData()
         thread {
-            allSiteList = if (aqiDao.getAllSite().isNullOrEmpty()) {
-                getDefaultList()
-            } else {
-                aqiDao.getAllSite()
+            if (!aqiDao.getAllSite().isNullOrEmpty()) {
+                allSiteList.postValue(aqiDao.getAllSite())
             }
-            data.postValue(allSiteList)
         }
-        return data
+        return allSiteList
     }
 
     override fun getAllFollowedSite(): LiveData<List<SiteModel>> {
-        val data = MutableLiveData<List<SiteModel>>()
-        var allFollowSiteList : List<SiteModel> = mutableListOf()
+        followSiteList = MutableLiveData()
         thread {
-            allFollowSiteList = if (aqiDao.getAllSite().isNullOrEmpty()) {
+            if (aqiDao.getAllSite().isNullOrEmpty()) {
+                Log.d("esther", "getDefaultList")
                 getDefaultList()
             } else {
-                aqiDao.getAllFollowSite()
+                Log.d("esther", "All from DB")
+                followSiteList.postValue(aqiDao.getAllFollowSite())
             }
-            data.postValue(allFollowSiteList)
         }
-        return data
+        return followSiteList
     }
 
-    private fun getDefaultList() : List<SiteModel> {
-        val allSiteList : MutableList<SiteModel> = mutableListOf()
+    private fun getDefaultList() {
+        defaultSiteList = mutableListOf()
         aqiDataTask = AqiDataTask(object: AqiDataTask.TaskListener {
-            override fun onSucceed(result: List<AqiModel>?) {
-                result?.forEach {
-                    var tempSite = SiteModel(siteId = it.siteId.toString())
+            override fun onSucceed(result: List<AqiModel>) {
+                result.forEach {
+                    val tempSite = SiteModel(siteId = it.siteId.toString())
                     tempSite.siteName = it.siteName
                     tempSite.county = it.county
                     tempSite.latitude = it.latitude
@@ -60,19 +58,21 @@ class AqiRepositoryImpl : AqiRepository {
                     tempSite.aQI = it.aQI
                     tempSite.publishTime = it.publishTime
                     tempSite.isFollow = it.siteId.equals("12")
-                    allSiteList.add(tempSite)
                     aqiDao.insertSite(tempSite)
+                    defaultSiteList.add(tempSite)
+                    Log.d("esther", "add $tempSite")
                 }
+                followSiteList.postValue(defaultSiteList)
+                Log.d("esther", "postValue(defaultSiteList) : $followSiteList")
             }
 
-            override fun onFailed(error: ResponseBody?) {
+            override fun onFailed(error: ResponseBody) {
                 Log.d("esther", "Fail $error")
             }
 
         }, RequestEntity(Constant.top, 0, "json", ""))
         TaskManager(aqiDataTask).start()
 
-        return allSiteList.toList()
     }
 
     override fun followSite(siteId: String) {
@@ -88,30 +88,29 @@ class AqiRepositoryImpl : AqiRepository {
     }
 
     override fun insertAqiData() {
-
-            aqiDataTask = AqiDataTask(object : AqiDataTask.TaskListener {
-            override fun onSucceed(result: List<AqiModel>?) {
-                result!!.forEach { aqi ->
+        aqiDataTask = AqiDataTask(object : AqiDataTask.TaskListener {
+            override fun onSucceed(result: List<AqiModel>) {
+                result.forEach { aqi ->
                     //有資料時,表示有重複的資料
                     if(aqiDao.getAll().isNotEmpty() && aqiDao.filterBySite(aqi.siteId, aqi.publishTime).isNotEmpty()) {
-                        Log.d("esther", "有重複的資料")
+//                        Log.d("esther", "有重複的資料")
                         return
                     }
                     if (aqi.siteId.isNullOrEmpty() || aqi.publishTime.isNullOrEmpty()) {
-                        Log.d("esther", "siteId null or publishTime null")
+//                        Log.d("esther", "siteId null or publishTime null")
                         return@forEach
                     } else {
                         val siteId = aqi.siteId.toLong()
                         val publishTime = DateUtil.DateToStamp(aqi.publishTime)
                         aqi.id = siteId + publishTime
                         aqiDao.insertAqi(aqi)
-                        Log.d("esther", "insert! : " + aqi.siteName + "  " + aqi.publishTime.toString() + " " + "AQI ${aqi.aQI}")
+//                        Log.d("esther", "insert! : " + aqi.siteName + "  " + aqi.publishTime.toString() + " " + "AQI ${aqi.aQI}")
                     }
                 }
             }
 
-            override fun onFailed(error: ResponseBody?) {
-                Log.d("esther", "Fail $error")
+            override fun onFailed(error: ResponseBody) {
+//                Log.d("esther", "Fail $error")
             }
 
         }, RequestEntity(Constant.top, 0, "json", ""))

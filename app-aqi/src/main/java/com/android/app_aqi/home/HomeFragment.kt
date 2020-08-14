@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
@@ -85,7 +84,7 @@ class HomeFragment : Fragment() {
 
 
     private fun initViewPager() {
-        sharedViewModel.allFollowedSite.value?.let {
+        sharedViewModel.followedSite?.let {
             siteViewPagerAdapter = SiteViewPagerAdapter(it , fm = childFragmentManager)
             siteViewPager.adapter = siteViewPagerAdapter
             siteViewPager.currentItem = sharedViewModel.currentPos

@@ -10,9 +10,9 @@ abstract class TaskService {
     lateinit var params: Map<String, String>
     lateinit var request: RequestEntity
 
-    abstract fun onTaskSucceed(result: Any?)
+    abstract fun onTaskSucceed(result: Any)
 
-    abstract fun onTaskFailed(error: Any?)
+    abstract fun onTaskFailed(error: Any)
 
     open fun genParams(request: RequestEntity): Map<String, String>{
         return request.serializeToMap()
