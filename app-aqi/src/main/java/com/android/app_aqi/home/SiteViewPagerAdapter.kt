@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.android.app_aqi.model.SiteModel
 
-class SiteViewPagerAdapter(private val siteList : List<SiteModel>, fm : FragmentManager) : FragmentStatePagerAdapter(fm) {
+class SiteViewPagerAdapter(private val siteList : List<SiteModel>, fm : FragmentManager) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT ) {
     override fun getCount(): Int {
         return siteList.size
     }

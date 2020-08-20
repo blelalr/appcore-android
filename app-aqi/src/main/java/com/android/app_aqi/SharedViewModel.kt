@@ -2,6 +2,7 @@ package com.android.app_aqi
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.android.app_aqi.model.AqiModel
 import com.android.app_aqi.model.SiteModel
 import com.android.app_aqi.repository.AqiRepository
 import com.android.app_aqi.repository.AqiRepositoryImpl
@@ -24,6 +25,10 @@ class SharedViewModel(private val repositoryImpl: AqiRepository = AqiRepositoryI
 
     fun unFollowSite(siteId: String) {
         repositoryImpl.unFollowSite(siteId)
+    }
+
+    fun getLast12HourAqiDataBySiteId(siteId: String) : LiveData<List<AqiModel>>{
+        return repositoryImpl.getLast12HourAqiDataBySiteId(siteId)
     }
 
 }

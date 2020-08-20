@@ -17,6 +17,9 @@ interface AqiDao {
     @Query("SELECT * FROM AQI WHERE siteId= :siteId AND publishTime= :publishTime")
     fun filterBySite(siteId: String?, publishTime: String?): List<AqiModel>
 
+    @Query("SELECT * FROM AQI WHERE siteId=:siteId ORDER by publishTime DESC LIMIT 12")
+    fun getLast12HourAqiDataBySiteId(siteId: String): List<AqiModel>?
+
     //TABLE ALL_SITE
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertSite(it: SiteModel)
@@ -35,5 +38,6 @@ interface AqiDao {
 
     @Query("SELECT isFollow FROM ALL_SITE WHERE siteId = :siteId")
     fun isFollow(siteId: String): Boolean
+
 
 }

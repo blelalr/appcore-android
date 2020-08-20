@@ -21,6 +21,7 @@ class AqiRepositoryImpl : AqiRepository {
     private lateinit var followSiteList: MutableLiveData<List<SiteModel>>
     private lateinit var allSiteList: MutableLiveData<List<SiteModel>>
     private lateinit var defaultSiteList: MutableList<SiteModel>
+    private lateinit var last12HourAqiDataList: MutableLiveData<List<AqiModel>>
     override fun getAllSiteList(): LiveData<List<SiteModel>> {
         allSiteList = MutableLiveData()
         thread {
@@ -102,7 +103,7 @@ class AqiRepositoryImpl : AqiRepository {
                         return@forEach
                     } else {
                         val siteId = aqi.siteId.toLong()
-                        val publishTime = DateUtil.DateToStamp(aqi.publishTime)
+                        val publishTime = DateUtil.covertDateToTimestamp(aqi.publishTime)
                         aqi.id = siteId + publishTime
                         aqiDao.insertAqi(aqi)
 //                        Log.d("esther", "insert! : " + aqi.siteName + "  " + aqi.publishTime.toString() + " " + "AQI ${aqi.aQI}")
@@ -128,5 +129,15 @@ class AqiRepositoryImpl : AqiRepository {
 
     override fun updateFollowSiteList() {
         getAllFollowedSite()
+    }
+
+    override fun getLast12HourAqiDataBySiteId(siteId: String): LiveData<List<AqiModel>> {
+        last12HourAqiDataList = MutableLiveData()
+        thread {
+            if (!aqiDao.getAll().isNullOrEmpty()) {
+                last12HourAqiDataList.postValue(aqiDao.getLast12HourAqiDataBySiteId(siteId))
+            }
+        }
+        return last12HourAqiDataList
     }
 }

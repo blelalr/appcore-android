@@ -1,6 +1,7 @@
 package com.android.app_aqi.repository
 
 import androidx.lifecycle.LiveData
+import com.android.app_aqi.model.AqiModel
 import com.android.app_aqi.model.SiteModel
 
 interface AqiRepository {
@@ -18,5 +19,7 @@ interface AqiRepository {
     fun isFollowed(siteId: String): Boolean
 
     fun updateFollowSiteList()
+
+    fun getLast12HourAqiDataBySiteId(siteId: String): LiveData<List<AqiModel>>
 
 }

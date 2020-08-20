@@ -15,7 +15,7 @@ object DateUtil {
         return DateUtils.isToday(monitorDateTime.time)
     }
 
-    fun DateToStamp(date: String): Long {
+    fun covertDateToTimestamp(date: String): Long {
         val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.TAIWAN)
 
         return simpleDateFormat.parse(date).time

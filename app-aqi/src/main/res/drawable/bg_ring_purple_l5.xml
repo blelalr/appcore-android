@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="ring"
+    android:useLevel="false"
+    android:thickness="6dp"
+    android:innerRadius="85dp"
+    >
+    <solid
+        android:color="@color/color_purple_L5"/>
+
+    <gradient
+        android:startColor="@android:color/transparent"
+        android:endColor="@color/color_purple_L5"
+        android:type="linear"
+        android:angle="90"/>
+</shape>
