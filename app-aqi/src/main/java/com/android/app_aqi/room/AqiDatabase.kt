@@ -18,10 +18,12 @@ abstract class AqiDatabase : RoomDatabase(){
         private var INSTANCE: AqiDatabase? = null
 
         fun getInstance(application: Application): AqiDatabase {
-            synchronized(AqiDatabase.lock) {
-                if (AqiDatabase.INSTANCE == null) {
-                    AqiDatabase.INSTANCE =
-                            Room.databaseBuilder(application, AqiDatabase::class.java, AqiDatabase.DATABASE_NAME)
+            synchronized(lock) {
+                if (INSTANCE == null) {
+                    INSTANCE =
+                            Room.databaseBuilder(application, AqiDatabase::class.java, DATABASE_NAME)
+                                    .allowMainThreadQueries()
+                                    .fallbackToDestructiveMigration()
                                     .build()
                 }
             }

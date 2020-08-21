@@ -17,8 +17,11 @@ interface AqiDao {
     @Query("SELECT * FROM AQI WHERE siteId= :siteId AND publishTime= :publishTime")
     fun filterBySite(siteId: String?, publishTime: String?): List<AqiModel>
 
-    @Query("SELECT * FROM AQI WHERE siteId=:siteId ORDER by publishTime DESC LIMIT 12")
-    fun getLast12HourAqiDataBySiteId(siteId: String): List<AqiModel>?
+    @Query("SELECT * FROM AQI WHERE aqi is NOT Null AND siteId=:siteId ORDER by publishTime DESC LIMIT 12")
+    fun getLast12HourAqiDataBySiteId(siteId: String): List<AqiModel>
+
+    @Query("SELECT *, max(publishTime) FROM AQI WHERE aqi is NOT Null AND siteId=:siteId")
+    fun getLastAqiDataBySiteId(siteId: String): AqiModel
 
     //TABLE ALL_SITE
     @Insert(onConflict = OnConflictStrategy.REPLACE)

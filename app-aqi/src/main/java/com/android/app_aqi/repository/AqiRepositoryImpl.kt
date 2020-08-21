@@ -22,6 +22,7 @@ class AqiRepositoryImpl : AqiRepository {
     private lateinit var allSiteList: MutableLiveData<List<SiteModel>>
     private lateinit var defaultSiteList: MutableList<SiteModel>
     private lateinit var last12HourAqiDataList: MutableLiveData<List<AqiModel>>
+    private lateinit var lastAqiDataList: MutableLiveData<List<AqiModel>>
     override fun getAllSiteList(): LiveData<List<SiteModel>> {
         allSiteList = MutableLiveData()
         thread {
@@ -139,5 +140,20 @@ class AqiRepositoryImpl : AqiRepository {
             }
         }
         return last12HourAqiDataList
+    }
+
+    override fun getLastAqiDataBySiteIdList(followSiteIdList: List<SiteModel>):  LiveData<List<AqiModel>>{
+       lastAqiDataList = MutableLiveData()
+        val tempList : MutableList<AqiModel>  = mutableListOf()
+        thread {
+            if (!aqiDao.getAll().isNullOrEmpty()) {
+                followSiteIdList.forEach {
+                    tempList.add(aqiDao.getLastAqiDataBySiteId(it.siteId))
+                }
+                lastAqiDataList.postValue(tempList)
+
+            }
+        }
+        return lastAqiDataList
     }
 }

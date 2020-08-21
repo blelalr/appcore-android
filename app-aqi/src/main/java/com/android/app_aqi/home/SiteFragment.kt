@@ -1,6 +1,7 @@
 package com.android.app_aqi.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,9 +23,9 @@ import com.android.app_aqi.model.SiteModel
 
 class SiteFragment : Fragment() {
     companion object {
-        fun newInstance(aqi : SiteModel): SiteFragment {
+        fun newInstance(aqi : AqiModel): SiteFragment {
             val args = Bundle()
-            args.putSerializable(SiteModel::class.simpleName, aqi)
+            args.putSerializable(AqiModel::class.simpleName, aqi)
             val fragment = SiteFragment()
             fragment.arguments = args
             return fragment
@@ -33,7 +34,7 @@ class SiteFragment : Fragment() {
 
     private var last12HourAqiDataList: List<AqiModel>? = null
     private lateinit var viewModel: SharedViewModel
-    private lateinit var aqi: SiteModel
+    private lateinit var aqi: AqiModel
     private lateinit var siteName: TextView
     private lateinit var siteAqi: TextView
     private lateinit var root: ConstraintLayout
@@ -61,14 +62,22 @@ class SiteFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(SharedViewModel::class.java)
 
-        aqi = arguments!!.getSerializable(SiteModel::class.simpleName) as SiteModel
+        aqi = arguments!!.getSerializable(AqiModel::class.simpleName) as AqiModel
         siteName.text = aqi.siteName
-        siteAqi.text = aqi.aQI
-        viewModel.getLast12HourAqiDataBySiteId(aqi.siteId).observe(this.viewLifecycleOwner, Observer {
-            last12HourAqiDataList = it
-            rvPollutions.adapter = PollutionsAdapter(Constant.PollutionType.values())
-        })
-        setBackgroundColorByAqi(aqi.aQI?.toInt())
+
+        aqi.siteId?.let { siteId ->
+            viewModel.getLast12HourAqiDataBySiteId(siteId).observe(this.viewLifecycleOwner, Observer {
+                last12HourAqiDataList = it
+                rvPollutions.adapter = PollutionsAdapter(Constant.PollutionType.values())
+
+                if (it.isNotEmpty() && it[0].aQI?.length != 0) {
+                    setBackgroundColorByAqi(it[0].aQI!!.toInt())
+                }
+                siteAqi.text = it[0].aQI
+
+            })
+        }
+
         ViewCompat.setTransitionName(root, aqi.siteId)
 
     }
@@ -78,39 +87,15 @@ class SiteFragment : Fragment() {
         parentFragment?.startPostponedEnterTransition()
     }
 
-    private fun setBackgroundColorByAqi(value: Int?){
-//        var level = 0
-//        when {
-//            value == 0 -> level = 0
-//            value <= 50 -> level = 1
-//            value <= 100 -> level = 2
-//            value <= 150 -> level = 3
-//            value <= 200 -> level = 4
-//            value <= 300 -> level = 5
-//            value > 300 -> level = 6
-//        }
-
-        when (value) {
-            in 0..21 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_green_l1, null)
-            in 21..22 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_yellow_l2, null)
-            in 23..24 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_orange_l3, null)
-            in 24..25 -> {
-                llAqi.background = resources.getDrawable(R.drawable.bg_ring_red_l4, null)
-                siteName.setTextColor(resources.getColor(R.color.color_white_word))
-                siteAqi.setTextColor(resources.getColor(R.color.color_white_word))
-            }
-            in 28..30 -> {
-                llAqi.background = resources.getDrawable(R.drawable.bg_ring_purple_l5, null)
-                siteName.setTextColor(resources.getColor(R.color.color_white_word))
-                siteAqi.setTextColor(resources.getColor(R.color.color_white_word))
-            }
-            else -> {
-                llAqi.background = resources.getDrawable(R.drawable.bg_ring_dark_purple_l6, null)
-                siteName.setTextColor(resources.getColor(R.color.color_white_word))
-                siteAqi.setTextColor(resources.getColor(R.color.color_white_word))
-            }
+    private fun setBackgroundColorByAqi(value: Int){
+        when  {
+            value <= 50 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_green_l1, null)
+            value <= 100 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_yellow_l2, null)
+            value <= 150 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_orange_l3, null)
+            value <= 200 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_red_l4, null)
+            value <= 300 -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_purple_l5, null)
+            else -> llAqi.background = resources.getDrawable(R.drawable.bg_ring_dark_purple_l6, null)
         }
-
     }
 
 }

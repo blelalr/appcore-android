@@ -22,4 +22,6 @@ interface AqiRepository {
 
     fun getLast12HourAqiDataBySiteId(siteId: String): LiveData<List<AqiModel>>
 
+    fun getLastAqiDataBySiteIdList(followSiteIdList: List<SiteModel>): LiveData<List<AqiModel>>
+
 }

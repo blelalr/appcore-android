@@ -97,7 +97,7 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener , SiteListDia
 
     private fun initRecyclerView() {
         listRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        sharedViewModel.followedSite?.let{
+        sharedViewModel.followedSite.let{
             listRecyclerView.adapter = SiteListAdapter(it, this)
         }
     }
@@ -145,8 +145,10 @@ class ListFragment : Fragment(), SiteListAdapter.ItemClickListener , SiteListDia
     override fun onDismiss() {
         sharedViewModel.getFollowSiteList().observe(this.viewLifecycleOwner, Observer {
             sharedViewModel.followedSite = mutableListOf()
-            sharedViewModel.followedSite = it
-            initRecyclerView()
+            sharedViewModel.getLastAqiDataBySiteId(it).observe(this, Observer { lastAqiData ->
+                sharedViewModel.followedSite = lastAqiData
+                initRecyclerView()
+            })
         })
     }
 }

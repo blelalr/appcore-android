@@ -10,7 +10,7 @@ import com.android.app_aqi.repository.AqiRepositoryImpl
 class SharedViewModel(private val repositoryImpl: AqiRepository = AqiRepositoryImpl()) : ViewModel() {
     var currentPos = 0
     lateinit var allSite :List<SiteModel>
-    lateinit var followedSite :List<SiteModel>
+    lateinit var followedSite :List<AqiModel>
     fun getFollowSiteList() : LiveData<List<SiteModel>> {
         return repositoryImpl.getAllFollowedSite()
     }
@@ -29,6 +29,10 @@ class SharedViewModel(private val repositoryImpl: AqiRepository = AqiRepositoryI
 
     fun getLast12HourAqiDataBySiteId(siteId: String) : LiveData<List<AqiModel>>{
         return repositoryImpl.getLast12HourAqiDataBySiteId(siteId)
+    }
+
+    fun getLastAqiDataBySiteId(siteIdList: List<SiteModel>) : LiveData<List<AqiModel>> {
+        return repositoryImpl.getLastAqiDataBySiteIdList(siteIdList)
     }
 
 }

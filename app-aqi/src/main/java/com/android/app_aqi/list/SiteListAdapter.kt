@@ -8,21 +8,24 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
+import com.android.app_aqi.Constant
 import com.android.app_aqi.R
+import com.android.app_aqi.SharedViewModel
+import com.android.app_aqi.home.PollutionsAdapter
+import com.android.app_aqi.model.AqiModel
 import com.android.app_aqi.model.SiteModel
 
-class SiteListAdapter(private val siteList : List<SiteModel>, private val listener: ItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val ITEM_TYPE_CONTENT: Int = 0
-    private val ITEM_TYPE_FOOTER: Int = 1
+class SiteListAdapter(private val siteList : List<AqiModel>,  private val listener: ItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val ITEM_TYPE_CONTENT = 0
+    private val ITEM_TYPE_FOOTER = 1
 
-    private var mContext: Context? = null
     private var mFooterCount : Int = 1
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        mContext = parent.context
         return if(viewType == ITEM_TYPE_CONTENT) {
             ListViewHolder(inflater, parent)
         } else {
@@ -46,7 +49,7 @@ class SiteListAdapter(private val siteList : List<SiteModel>, private val listen
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ListViewHolder -> {
-                val site: SiteModel = siteList[position]
+                val site: AqiModel = siteList[position]
                 holder.setIsRecyclable(false)
                 holder.bind(site)
                 ViewCompat.setTransitionName(holder.itemRoot, site.siteId)
@@ -67,38 +70,29 @@ class SiteListAdapter(private val siteList : List<SiteModel>, private val listen
 
     class ListViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
             RecyclerView.ViewHolder(inflater.inflate(R.layout.list_item, parent, false)) {
-        var siteNameText: TextView = itemView.findViewById(R.id.tv_site_name)
-        var siteAqiText: TextView = itemView.findViewById(R.id.tv_aqi)
+        private var siteNameText: TextView = itemView.findViewById(R.id.tv_site_name)
+        private var siteAqiText: TextView = itemView.findViewById(R.id.tv_aqi)
+        private var statusText: TextView = itemView.findViewById(R.id.tv_status)
+        private var aqiLevel: View = itemView.findViewById(R.id.v_aqi_level)
         var itemRoot: CardView = itemView.findViewById(R.id.list_item_root)
         private var context = parent.context
 
-        fun bind(site: SiteModel) {
+        fun bind(site: AqiModel) {
             siteNameText.text = site.siteName
             siteAqiText.text = site.aQI
-            setBackgroundColorByAqi(site.aQI?.toInt(), context)
+            statusText.text = site.status
+            site.aQI?.toInt()?.let { setBackgroundColorByAqi(it, context) }
 
         }
 
-        private fun setBackgroundColorByAqi(value: Int?, context: Context){
-            when (value) {
-                in 0..21 -> itemRoot.setCardBackgroundColor(context.resources.getColor(R.color.color_green_L1))
-                in 21..22 -> itemRoot.setCardBackgroundColor(context.resources.getColor(R.color.color_yellow_L2))
-                in 23..24 -> itemRoot.setCardBackgroundColor(context.resources.getColor(R.color.color_orange_L3))
-                in 24..25 -> {
-                    itemRoot.setCardBackgroundColor(context.resources.getColor(R.color.color_red_L4))
-                    siteNameText.setTextColor(context.resources.getColor(R.color.color_white_word))
-                    siteAqiText.setTextColor(context.resources.getColor(R.color.color_white_word))
-                }
-                in 28..30 -> {
-                    itemRoot.setCardBackgroundColor(context.resources.getColor(R.color.color_purple_L5))
-                    siteNameText.setTextColor(context.resources.getColor(R.color.color_white_word))
-                    siteAqiText.setTextColor(context.resources.getColor(R.color.color_white_word))
-                }
-                else -> {
-                    itemRoot.setCardBackgroundColor(context.resources.getColor(R.color.color_dark_purple_L6))
-                    siteNameText.setTextColor(context.resources.getColor(R.color.color_white_word))
-                    siteAqiText.setTextColor(context.resources.getColor(R.color.color_white_word))
-                }
+        private fun setBackgroundColorByAqi(value: Int, context: Context){
+            when {
+                value <= 50 -> aqiLevel.setBackgroundColor(context.resources.getColor(R.color.color_green_L1))
+                value <= 100 -> aqiLevel.setBackgroundColor(context.resources.getColor(R.color.color_yellow_L2))
+                value <= 150 -> aqiLevel.setBackgroundColor(context.resources.getColor(R.color.color_orange_L3))
+                value <= 200 -> aqiLevel.setBackgroundColor(context.resources.getColor(R.color.color_red_L4))
+                value <= 300 -> aqiLevel.setBackgroundColor(context.resources.getColor(R.color.color_purple_L5))
+                else -> aqiLevel.setBackgroundColor(context.resources.getColor(R.color.color_dark_purple_L6))
             }
         }
 

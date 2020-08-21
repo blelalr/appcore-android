@@ -23,8 +23,10 @@ class MainActivity : AppCompatActivity(), ListFragment.ListItemListener, HomeFra
     private fun initData() {
         sharedViewModel.getFollowSiteList().observe(this, Observer {
             sharedViewModel.followedSite = mutableListOf()
-            sharedViewModel.followedSite = it
-            replaceByHomeFragment(null)
+            sharedViewModel.getLastAqiDataBySiteId(it).observe(this, Observer {
+                sharedViewModel.followedSite = it
+                replaceByHomeFragment(null)
+            })
         })
     }
 
