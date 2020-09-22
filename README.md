@@ -1,4 +1,5 @@
 # appcore-android
+
 ## Social Login (Facebook, Google, Line) Setting
 How to implement library
 - Step.1 Add maven repository url in your root build.gradle:
@@ -14,7 +15,7 @@ How to implement library
     
       implementation 'com.android.appcore:social-login:1.0.0'
 
-Create your own develop project
+Create your own develop project & Follow the instruction setup social login setting
 - [Facebook developer](https://developers.facebook.com/)
 - [Google console](https://console.cloud.google.com/)
 - [Line developer](https://developers.line.biz/)
@@ -58,26 +59,26 @@ How to use
 - Login 
       
         //Use this method when click login button.
-        Auth.login(FragmentActivity activity, PlatformType platformType)
+        Auth.login(activity, platformType)
         
-        //Add this method to your Activity
+        //Copy following code to your Activity
         @Override
         protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
           super.onActivityResult( requestCode, resultCode, data );
-          Auth.onActivityResult(int requestCode, int resultCode, Intent data)
+          Auth.onActivityResult(requestCode, resultCode, data)
         }
         
 - Logout
     
         Auth.logout()
         
-- Update UI when UserInfo isLogin change
+- Observe UserInfo for UI change when UserInfo isLogin change
 
         Auth.getUserInfo().observe( this, userInfo -> {
-            if(userInfo.isLogin) {
-                setLoginView();
+            if(userInfo.isLogin()) {
+                Log.d("Social Login", "User Login." + userInfo.getId()); //setLoginView();
             } else {
-                setLogoutView();
+                Log.d("Social Login", "User Logout."); //setLogoutView();
             }
          
         });
