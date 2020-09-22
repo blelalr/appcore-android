@@ -72,4 +72,7 @@ dependencies {
 
     //Google Analytics
     implementation 'com.google.firebase:firebase-analytics:17.4.3'
+
+    //MPAndroidChart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

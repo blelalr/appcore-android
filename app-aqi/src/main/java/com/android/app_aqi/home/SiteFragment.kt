@@ -1,13 +1,11 @@
 package com.android.app_aqi.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
@@ -32,7 +30,6 @@ class SiteFragment : Fragment() {
         }
     }
 
-    private var last12HourAqiDataList: List<AqiModel>? = null
     private lateinit var viewModel: SharedViewModel
     private lateinit var aqi: AqiModel
     private lateinit var siteName: TextView
@@ -67,8 +64,7 @@ class SiteFragment : Fragment() {
 
         aqi.siteId?.let { siteId ->
             viewModel.getLast12HourAqiDataBySiteId(siteId).observe(this.viewLifecycleOwner, Observer {
-                last12HourAqiDataList = it
-                rvPollutions.adapter = PollutionsAdapter(Constant.PollutionType.values())
+                rvPollutions.adapter = PollutionsAdapter(Constant.PollutionType.values(), it)
 
                 if (it.isNotEmpty() && it[0].aQI?.length != 0) {
                     setBackgroundColorByAqi(it[0].aQI!!.toInt())
