@@ -6,7 +6,7 @@ How to implement library
       allprojects {
         repositories {
           ...
-          maven { url  "https://blelalr.bintray.com/maven" }
+          maven { url  "https://dl.bintray.com/blelalr/repo" }
         }
       }
 
