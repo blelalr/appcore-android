@@ -1,6 +1,7 @@
 # appcore-android
 
 ## APP: aqi-app
+![](https://media.giphy.com/media/vJedPwjKGBZIN33ZE9/giphy.gif)
 
 - Kotlin (Corutinue)
 - Mvvm (Livedata / ViewModel)
