@@ -1,6 +1,8 @@
 # appcore-android
 
 ## Social Login (Facebook, Google, Line) Setting
+![](https://media.giphy.com/media/IZKCWonSzrHnrmaGuC/giphy.gif)
+
 How to implement library
 - Step.1 Add maven repository url in your root build.gradle:
     	
