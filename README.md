@@ -4,7 +4,7 @@
 ![](https://media.giphy.com/media/vJedPwjKGBZIN33ZE9/giphy.gif)
 
 - Kotlin (Corutinue)
-- Mvvm (Livedata / ViewModel)
+- MVVM (Livedata / ViewModel)
 - Room (Local data storage)
 - Retrofit (Network)
 - Work Manager (Periodic)
