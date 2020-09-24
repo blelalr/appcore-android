@@ -1,6 +1,15 @@
 # appcore-android
 
-## Social Login (Facebook, Google, Line) Setting
+## APP: aqi-app
+
+- Kotlin (Corutinue)
+- Mvvm (Livedata / ViewModel)
+- Room (Local data storage)
+- Retrofit (Network)
+- Work Manager (Periodic)
+
+
+## Library: Social Login (Facebook, Google, Line)
 ![](https://media.giphy.com/media/IZKCWonSzrHnrmaGuC/giphy.gif)
 
 How to implement library
