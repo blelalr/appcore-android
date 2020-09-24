@@ -7,7 +7,8 @@
 - Room (Local data storage)
 - Retrofit (Network)
 - Work Manager (Periodic)
-
+- MPAndroidChart (Bar Chart)
+- Material Design (Card)
 
 ## Library: Social Login (Facebook, Google, Line)
 ![](https://media.giphy.com/media/IZKCWonSzrHnrmaGuC/giphy.gif)
