@@ -3,9 +3,6 @@ package com.android.app_aqi.api
 import com.android.app_aqi.Constant
 import com.android.app_aqi.model.AqiModel
 import com.google.gson.GsonBuilder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit.Builder
