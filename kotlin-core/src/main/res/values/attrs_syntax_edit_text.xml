@@ -1,0 +1,23 @@
+<resources>
+    <declare-styleable name="SyntaxEditText">
+        <attr name="syntaxType" format="enum" >
+            <enum name="password" value="0" />
+            <enum name="email" value="1"/>
+            <enum name="phone" value="2"/>
+        </attr>
+        <attr name="inputTitle" format="string"/>
+        <attr name="inputTitleSize" format="dimension"/>
+        <attr name="inputTitleColor" format="color"/>
+
+        <attr name="errorMessage" format="string"/>
+        <attr name="errorMessageColor" format="color"/>
+        <attr name="errorMessageSize" format="dimension"/>
+
+        <attr name="inputTextSize" format="dimension"/>
+        <attr name="inputTextColor" format="color"/>
+        <attr name="inputBackgroundColor" format="color"/>
+        <attr name="inputErrorBackgroundColor" format="color"/>
+        <attr name="inputHint" format="string"/>
+        <attr name="inputHintColor" format="color"/>
+    </declare-styleable>
+</resources>
