@@ -33,12 +33,12 @@ Create your own develop project & Follow the instruction setup social login sett
 - [Google console](https://console.cloud.google.com/)
 - [Line developer](https://developers.line.biz/)
 
-Add to String.xml
+Add to String.xml (just add what you need.)
 
-    <string name="facebook_app_id">1092850791053755</string>
-    <string name="fb_login_protocol_scheme">fb1092850791053755</string>
-    <string name="google_default_web_client_id">789751588120-jdsvmcn0hflbav3lqq7qv9vm280vp9cu.apps.googleusercontent.com</string>
-    <string name="line_channel_id">1655332252</string>  
+    <string name="facebook_app_id">XXXXXXXXXXX</string>
+    <string name="fb_login_protocol_scheme">XXXXXXXXXXX</string>
+    <string name="google_default_web_client_id">XXXXXXXXXXX</string>
+    <string name="line_channel_id">XXXXXXXXXXX</string>  
     
 How to use
 - Login 
