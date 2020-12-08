@@ -1,9 +1,5 @@
 apply plugin: 'com.android.library'
 
-def ssoPropertiesFile = rootProject.file("sso.properties")
-def ssoProperties = new Properties()
-ssoProperties.load(new FileInputStream(ssoPropertiesFile))
-
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -19,32 +15,6 @@ android {
         versionCode 2
         versionName "1.0.1"
         vectorDrawables.useSupportLibrary = true
-
-        if(ssoProperties.getProperty('facebook_app_id') != null) {
-            resValue("string", "facebook_app_id", ssoProperties['facebook_app_id'])
-        } else {
-            throw new FileNotFoundException("facebook_app_id not found in sso.properties")
-        }
-
-        if(ssoProperties.getProperty('fb_login_protocol_scheme') != null) {
-            resValue("string", "fb_login_protocol_scheme", ssoProperties['fb_login_protocol_scheme'])
-        } else {
-            throw new FileNotFoundException("fb_login_protocol_scheme not found in sso.properties")
-        }
-
-        if(ssoProperties.getProperty('google_default_web_client_id') != null) {
-            resValue("string", "google_default_web_client_id", ssoProperties['google_default_web_client_id'])
-        } else {
-            throw new FileNotFoundException("google_default_web_client_id not found in sso.properties")
-        }
-
-        if(ssoProperties.getProperty('line_channel_id') != null) {
-            resValue("string", "line_channel_id", ssoProperties['line_channel_id'])
-        } else {
-            throw new FileNotFoundException("line_channel_id not found in sso.properties")
-        }
-
-
     }
 
     buildTypes {

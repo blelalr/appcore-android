@@ -18,16 +18,28 @@ public class Auth {
     public static int LINE_SIGN_IN = 1002;
     public static String TAG = Auth.class.getSimpleName();
 
-    public static void login(FragmentActivity activity, @Nullable PlatformType platformType) {
+    public static void login(FragmentActivity activity, @Nullable PlatformType platformType) throws Exception {
         switch (platformType) {
             case Google:
-                socialLogin = new GoogleLogin(activity);
+                if(activity.getString(R.string.google_default_web_client_id).length() == 0) {
+                    throw new Error("google_default_web_client_id not found in R.string");
+                } else {
+                    socialLogin = new GoogleLogin(activity);
+                }
                 break;
             case Facebook:
-                socialLogin = new FacebookLogin(activity);
+                if(activity.getString(R.string.facebook_app_id).length() == 0 || activity.getString(R.string.fb_login_protocol_scheme).length() == 0 ) {
+                    throw new Error("facebook_app_id or fb_login_protocol_scheme not found in R.string");
+                } else {
+                    socialLogin = new FacebookLogin(activity);
+                }
                 break;
             case Line:
-                socialLogin = new LineLogin(activity);
+                if(activity.getString(R.string.line_channel_id).length() == 0 ) {
+                    throw new Error("line_channel_id not found in R.string");
+                } else {
+                    socialLogin = new LineLogin(activity);
+                }
                 break;
         }
 

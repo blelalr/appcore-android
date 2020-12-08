@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">SocialLogin</string>
+    <string name="facebook_app_id"></string>
+    <string name="fb_login_protocol_scheme"></string>
+    <string name="google_default_web_client_id"></string>
+    <string name="line_channel_id"></string>
 </resources>
