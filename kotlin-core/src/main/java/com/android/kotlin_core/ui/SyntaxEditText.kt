@@ -19,14 +19,15 @@ import com.android.kotlin_core.util.RegexUtil.*
  */
 class SyntaxEditText : ConstraintLayout, TextWatcher {
 
-    var isSyntaxPass: Boolean = false
     private lateinit var tvInputTitle: TextView
     private lateinit var tvErrorMessage: TextView
     private lateinit var etInput: EditText
+    private lateinit var _syntaxType: SyntaxType
+    private var isRequired: Boolean = false
     private var errorMessage: String? = null
     private var inputBackgroundColor: Int = 0
     private var inputErrorBackgroundColor: Int = 0
-    private var _syntaxType: SyntaxType = password
+    private lateinit var mSyntaxListener : OnSyntaxChangeListener
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -42,12 +43,15 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
         val view = View.inflate(context, R.layout.sample_syntax_edit_text, this)
+
         tvInputTitle = view.findViewById(R.id.tv_input_title)
         tvErrorMessage= view.findViewById(R.id.tv_input_error_msg)
         etInput = view.findViewById(R.id.et_input)
         // Load attributes
         val attr = context.obtainStyledAttributes(attrs, R.styleable.SyntaxEditText, defStyle, 0)
-        val value = attr.getInt(R.styleable.SyntaxEditText_syntaxType, 0)
+        val syntaxValue = attr.getInt(R.styleable.SyntaxEditText_syntaxType, 0)
+        isRequired = attr.getBoolean(R.styleable.SyntaxEditText_isRequired, false)
+
         val inputTitle = attr.getString(R.styleable.SyntaxEditText_inputTitle)
         val inputTitleSize = attr.getDimensionPixelSize(R.styleable.SyntaxEditText_inputTitleSize, 0)
         val inputTitleColor = attr.getColor(R.styleable.SyntaxEditText_inputTitleColor, 0)
@@ -78,7 +82,7 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
         etInput.hint = inputHint
         etInput.setHintTextColor(inputHintColor)
 
-        _syntaxType = SyntaxType.valueOf(SyntaxType.values()[value].name)
+        _syntaxType = SyntaxType.valueOf(SyntaxType.values()[syntaxValue].name)
         etInput.addTextChangedListener(this)
 
         attr.recycle()
@@ -86,8 +90,12 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
 
     private fun checkSyntax(s: CharSequence) {
         if(s.trim().isEmpty()) {
-            setInputErrorView()
-            tvErrorMessage.text = "不可為空"
+            if(isRequired) {
+                setInputErrorView()
+                tvErrorMessage.text = "不可為空"
+            } else {
+                setInputDefaultView()
+            }
         } else {
             when(_syntaxType) {
                 password -> checkSyntaxByType(checkPassword(s.toString()))
@@ -99,7 +107,6 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
     }
 
     private fun checkSyntaxByType(isSyntaxPass: Boolean) {
-        this.isSyntaxPass = isSyntaxPass
         if (isSyntaxPass){
             setInputDefaultView()
         } else {
@@ -108,14 +115,20 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
     }
 
     private fun setInputDefaultView() {
+        mSyntaxListener.onSyntaxChange( true)
         tvErrorMessage.visibility = GONE
         etInput.setBackgroundColor(inputBackgroundColor)
     }
 
     private fun setInputErrorView() {
+        mSyntaxListener.onSyntaxChange(false)
         tvErrorMessage.visibility = VISIBLE
         tvErrorMessage.text = errorMessage
         etInput.setBackgroundColor(inputErrorBackgroundColor)
+    }
+
+    fun setOnSyntaxChangeListener(syntaxListener :OnSyntaxChangeListener) {
+        mSyntaxListener = syntaxListener
     }
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {

@@ -5,6 +5,7 @@
             <enum name="email" value="1"/>
             <enum name="phone" value="2"/>
         </attr>
+        <attr name="isRequired" format="boolean"/>
         <attr name="inputTitle" format="string"/>
         <attr name="inputTitleSize" format="dimension"/>
         <attr name="inputTitleColor" format="color"/>
