@@ -26,47 +26,19 @@ How to implement library
 
 - Step 2. Add the dependency
     
-      implementation 'com.android.appcore:social-login:1.0.0'
+      implementation 'com.android.appcore:social-login:1.0.2'
 
 Create your own develop project & Follow the instruction setup social login setting
 - [Facebook developer](https://developers.facebook.com/)
 - [Google console](https://console.cloud.google.com/)
 - [Line developer](https://developers.line.biz/)
 
-Add to gradle.properties 
+Add to String.xml
 
-    facebook_app_id="your_facebook_app_id"
-    fb_login_protocol_scheme="your_fb_login_protocol_scheme"
-    google_default_web_client_id="your_google_default_web_client_id"
-    line_channel_id="your_line_channel_id"
-
-Add to build.gradle: just add what you need.
-     
-    defaultConfig {
-        
-        if(project.findProperty("facebook_app_id") == null) {
-            throw new FileNotFoundException("facebook_app_id not found in gradle.properties")
-        } else {
-            resValue("string", "facebook_app_id", (project.findProperty("facebook_app_id")))
-        }
-        if(project.findProperty("fb_login_protocol_scheme") == null) {
-            throw new FileNotFoundException("fb_login_protocol_scheme not found in gradle.properties")
-        } else {
-            resValue("string", "fb_login_protocol_scheme", (project.findProperty("fb_login_protocol_scheme")))
-        }
-        if(project.findProperty("google_default_web_client_id") == null) {
-            throw new FileNotFoundException("google_default_web_client_id not found in gradle.properties")
-        } else {
-            resValue("string", "google_default_web_client_id", (project.findProperty("google_default_web_client_id")))
-        }
-        if(project.findProperty("line_channel_id") == null) {
-            throw new FileNotFoundException("line_channel_id not found in gradle.properties")
-        } else {
-            resValue("string", "line_channel_id", (project.findProperty("line_channel_id")))
-        }
-        
-    }
-      
+    <string name="facebook_app_id">1092850791053755</string>
+    <string name="fb_login_protocol_scheme">fb1092850791053755</string>
+    <string name="google_default_web_client_id">789751588120-jdsvmcn0hflbav3lqq7qv9vm280vp9cu.apps.googleusercontent.com</string>
+    <string name="line_channel_id">1655332252</string>  
     
 How to use
 - Login 
