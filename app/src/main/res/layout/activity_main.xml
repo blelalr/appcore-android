@@ -6,7 +6,140 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+        <TextView
+            android:id="@+id/tv_token"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.03"
+            tools:text="token" />
+
+        <TextView
+            android:id="@+id/tv_user_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_token"
+            app:layout_constraintStart_toStartOf="@+id/tv_token"
+            app:layout_constraintTop_toBottomOf="@+id/tv_token"
+            tools:text="user id" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_token"
+            app:layout_constraintStart_toStartOf="@+id/tv_token"
+            app:layout_constraintTop_toBottomOf="@+id/tv_user_id"
+            tools:text="name" />
+
+        <TextView
+            android:id="@+id/tv_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_token"
+            app:layout_constraintStart_toStartOf="@+id/tv_token"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name"
+            tools:text="email" />
+
+        <LinearLayout
+            android:id="@+id/login_btns_root_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.97"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/btn_facebook_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:elevation="2dp"
+                android:padding="10dp"
+                android:text="Facebook 登入"
+                android:textAllCaps="false"
+                android:textColor="@android:color/secondary_text_dark"
+                app:backgroundTint="@android:color/white"
+                app:cornerRadius="10dp"
+                app:iconGravity="textStart"
+                app:iconTint="@null"
+                />
+
+            <Button
+                android:id="@+id/btn_google_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:elevation="2dp"
+                android:padding="10dp"
+                android:text="Google 登入"
+                android:textAllCaps="false"
+                android:textColor="@android:color/secondary_text_dark"
+                app:backgroundTint="@android:color/white"
+                app:cornerRadius="10dp"
+                app:iconGravity="textStart"
+                app:iconTint="@null"
+                />
+
+            <Button
+                android:id="@+id/btn_line_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:elevation="2dp"
+                android:padding="10dp"
+                android:text="Line 登入"
+                android:textAllCaps="false"
+                android:textColor="@android:color/secondary_text_dark"
+                app:backgroundTint="@android:color/white"
+                app:cornerRadius="10dp"
+                app:iconGravity="textStart"
+                app:iconTint="@null"
+                app:rippleColor="@android:color/secondary_text_dark" />
+
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:elevation="2dp"
+            android:padding="10dp"
+            android:textAllCaps="false"
+            android:textColor="@android:color/secondary_text_dark"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/white"
+            app:cornerRadius="10dp"
+            app:iconGravity="textStart"
+            app:iconTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_email"
+            app:layout_constraintVertical_bias="0.93"
+            tools:text="Google 登出" />
+
+
     <FrameLayout
+        android:visibility="gone"
         android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
