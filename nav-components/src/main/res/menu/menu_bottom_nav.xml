@@ -2,16 +2,16 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/nav_home_fragment"
+    <item android:id="@+id/homeFragment"
         android:title="@string/toolbar_home_title"
         android:icon="@drawable/ic_home"/>
 
-    <item android:id="@+id/nav_explore_fragment"
+    <item android:id="@+id/exploreFragment"
         android:title="@string/toolbar_explore_title"
         android:icon="@drawable/ic_explore"/>
 
 
-    <item android:id="@+id/nav_member_fragment"
+    <item android:id="@+id/memberFragment"
         android:title="@string/toolbar_member_title"
         android:icon="@drawable/ic_member"/>
 </menu>

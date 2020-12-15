@@ -3,42 +3,48 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@+id/nav_home_fragment">
+    app:startDestination="@+id/homeFragment">
 
     <fragment
-        android:id="@+id/nav_home_fragment"
-        android:label="@string/toolbar_home_title"
+        android:id="@+id/homeFragment"
         android:name="com.android.nav_components.HomeFragment"
-        tools:layout="@layout/fragment_home"
-        >
+        android:label="@string/toolbar_home_title"
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_nav_home_fragment_to_add_fragment"
-            app:destination="@+id/add_fragment"
+            app:destination="@+id/addFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
-            app:popExitAnim="@anim/nav_default_pop_exit_anim"/>
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
-        android:id="@+id/nav_explore_fragment"
+        android:id="@+id/exploreFragment"
         android:name="com.android.nav_components.ExploreFragment"
         android:label="@string/toolbar_explore_title"
-        tools:layout="@layout/fragment_explore"
-        />
+        tools:layout="@layout/fragment_explore">
+        <action
+            android:id="@+id/action_explore_fragment_to_productActivity"
+            app:destination="@id/productActivity" />
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_member_fragment"
+        android:id="@+id/memberFragment"
         android:name="com.android.nav_components.MemberFragment"
         android:label="@string/toolbar_member_title"
-        tools:layout="@layout/fragment_member"
-        />
+        tools:layout="@layout/fragment_member" />
 
     <fragment
-        android:id="@+id/add_fragment"
+        android:id="@+id/addFragment"
         android:name="com.android.nav_components.AddFragment"
         android:label="@string/toolbar_add_title"
         tools:layout="@layout/fragment_add" />
-    
+    <activity
+        android:id="@+id/productActivity"
+        android:name="com.android.nav_components.ProductActivity"
+        android:label="activity_product"
+        tools:layout="@layout/activity_product" />
+
 
 </navigation>
