@@ -1,5 +1,6 @@
 package com.android.app_aqi.api
 
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ class TaskManager {
             if (response.isSuccessful) {
                 response.body()?.let {
                     taskService.onTaskSucceed(it)
+                    Log.d("esther", it.toString())
                 }
             // Handle errors here
             } else {
