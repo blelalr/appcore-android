@@ -1,5 +1,5 @@
 package com.android.kotlin_core.ui
 
-interface OnSyntaxChangeListener {
+interface SyntaxChangeListener {
     fun onSyntaxChange(isSyntaxPass: Boolean)
 }

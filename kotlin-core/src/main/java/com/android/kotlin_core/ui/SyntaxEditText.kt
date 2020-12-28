@@ -27,7 +27,7 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
     private var errorMessage: String? = null
     private var inputBackgroundColor: Int = 0
     private var inputErrorBackgroundColor: Int = 0
-    private lateinit var mSyntaxListener : OnSyntaxChangeListener
+    private lateinit var mSyntaxListener : SyntaxChangeListener
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -127,7 +127,7 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
         etInput.setBackgroundColor(inputErrorBackgroundColor)
     }
 
-    fun setOnSyntaxChangeListener(syntaxListener :OnSyntaxChangeListener) {
+    fun setOnSyntaxChangeListener(syntaxListener :SyntaxChangeListener) {
         mSyntaxListener = syntaxListener
     }
 

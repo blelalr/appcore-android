@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import com.android.kotlin_core.ui.OnSyntaxChangeListener
+import com.android.kotlin_core.ui.SyntaxChangeListener
 import com.android.kotlin_core.ui.SyntaxEditText
 
 // TODO: Rename parameter arguments, choose names that match
@@ -44,13 +44,13 @@ class SyntaxEditTextFragment : Fragment() {
         syntaxEditTextEmail = view.findViewById(R.id.syntaxEditTextEmail)
         syntaxEditTextPhone = view.findViewById(R.id.syntaxEditTextPhone)
         btnSend = view.findViewById(R.id.btnSend)
-        syntaxEditTextEmail.setOnSyntaxChangeListener(object : OnSyntaxChangeListener {
+        syntaxEditTextEmail.setOnSyntaxChangeListener(object : SyntaxChangeListener {
             override fun onSyntaxChange(isSyntaxPass: Boolean) {
                 isSyntaxPassEmail = isSyntaxPass
                 btnSend.isEnabled = (isSyntaxPassEmail && isSyntaxPassPhone)
             }
         })
-        syntaxEditTextPhone.setOnSyntaxChangeListener(object : OnSyntaxChangeListener {
+        syntaxEditTextPhone.setOnSyntaxChangeListener(object : SyntaxChangeListener {
             override fun onSyntaxChange(isSyntaxPass: Boolean) {
                 isSyntaxPassPhone = isSyntaxPass
                 btnSend.isEnabled = (isSyntaxPassEmail && isSyntaxPassPhone)
