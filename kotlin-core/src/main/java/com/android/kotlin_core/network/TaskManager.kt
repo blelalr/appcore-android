@@ -7,10 +7,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 
-class TaskManager<PostData, ResponseData> constructor(var taskService: TaskService<PostData, ResponseData>) {
+class TaskManager<Request, Response> constructor(var taskService: TaskService<Request, Response>) {
     private var apiService = ApiServiceBuilder().apiService
 
-    suspend fun startTask(): ApiResult<ResponseData> {
+    suspend fun startTask(): ApiResult<Response> {
         return withContext(Dispatchers.IO) {
             DebugLog.e("Task Start   : [Method] -- ${taskService.getMethod()}")
             val result = when (taskService.getMethod()) {
