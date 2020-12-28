@@ -2,7 +2,7 @@ package com.android.kotlin_core.model
 
 import com.google.gson.annotations.SerializedName
 
-data class GetAuthGuestSessionNewResponseData @JvmOverloads constructor(
+data class GetAuthSessionResponseData @JvmOverloads constructor(
         @field:SerializedName("success")
         var success: Boolean,
         @field:SerializedName("guest_session_id")

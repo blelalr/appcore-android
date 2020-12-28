@@ -42,7 +42,7 @@ class SyntaxEditText : ConstraintLayout, TextWatcher {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val view = View.inflate(context, R.layout.sample_syntax_edit_text, this)
+        val view = View.inflate(context, R.layout.layout_syntax_edit_text, this)
 
         tvInputTitle = view.findViewById(R.id.tv_input_title)
         tvErrorMessage= view.findViewById(R.id.tv_input_error_msg)
