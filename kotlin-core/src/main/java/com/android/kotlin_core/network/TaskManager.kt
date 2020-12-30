@@ -5,7 +5,7 @@ import com.android.kotlin_core.util.DebugLog
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.lang.Exception
+
 
 class TaskManager<Request, Response> constructor(var taskService: TaskService<Request, Response>) {
     private var apiService = ApiServiceBuilder().apiService
@@ -36,12 +36,12 @@ class TaskManager<Request, Response> constructor(var taskService: TaskService<Re
                     DebugLog.e("Task Response: [Success]\n${Gson().toJson(resObj)}")
                     ApiResult.Success(resObj)
                 } else {
-                    DebugLog.e("Task Response: [Error] -- Code: ${result.code()}")
-                    DebugLog.e("Task Response: [Error] -- Message: ${result.message()}")
-                    ApiResult.Error(result.code(), result.message())
+                    val errorObj = ApiServiceBuilder().parseError(result)
+                    DebugLog.e("Task Response: [Error] --\n${Gson().toJson(errorObj)}")
+                    ApiResult.Error(errorObj)
                 }
             } catch (e: Exception) {
-                DebugLog.e("Task Response: [Exception] -- $e")
+                DebugLog.e("Task Response: [Exception] -- Exception: $e")
                 ApiResult.Exception(e)
             }
 
