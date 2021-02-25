@@ -1,2 +1,3 @@
+include ':schedule'
 include ':app', ':SocialLogin', ':nav-components', ':app-aqi', ':kotlin-core'
 rootProject.name='AppCore'
