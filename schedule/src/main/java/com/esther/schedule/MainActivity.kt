@@ -1,39 +1,47 @@
 package com.esther.schedule
 
 import android.os.Bundle
-import android.widget.FrameLayout
-import android.widget.LinearLayout
+import android.util.Log
+import android.view.View
+import android.widget.Button
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentTransaction
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var fragmentTransaction: FragmentTransaction
-    private lateinit var llWeek: LinearLayout
-    private val weekDays = arrayListOf("MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN")
+class MainActivity : AppCompatActivity(), View.OnClickListener {
+    private lateinit var btnPrev: Button
+    private lateinit var btnNext: Button
+    private val calenderViewModel : CalenderViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        calenderViewModel.initCalendar()
         initView()
     }
 
     private fun initView() {
-        llWeek = findViewById(R.id.ll_week_view_root)
-        fragmentTransaction = supportFragmentManager.beginTransaction()
-        for(index in 1 until weekDays.size +1){
-            addScheduleFragment(index)
-        }
-        fragmentTransaction.commit()
+        btnNext = findViewById(R.id.btn_next)
+        btnPrev = findViewById(R.id.btn_prev)
+        btnNext.setOnClickListener(this)
+        btnPrev.setOnClickListener(this)
+        calenderViewModel.getStartDayOfThisWeek().observe(this, Observer {
+            supportFragmentManager.beginTransaction()
+                    .replace(R.id.fl_container, WeekFragment.newInstance("", "")).commit()
+        })
+
     }
 
-    private fun addScheduleFragment(index: Int) {
-        val frame = FrameLayout(this)
-        val frameParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        frameParams.weight = 1f
-        frame.layoutParams = frameParams
-        frame.id = index
-        val fragment = ScheduleFragment.newInstance(weekDay = weekDays[index-1])
-        fragmentTransaction.add(index, fragment)
-        llWeek.addView(frame)
+
+    override fun onClick(view: View) {
+        if(view.id == R.id.btn_next){
+            calenderViewModel.toNextWeek()
+        }
+
+        if(view.id == R.id.btn_prev){
+            calenderViewModel.toPrevWeek()
+        }
     }
+
 }

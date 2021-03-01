@@ -27,7 +27,6 @@ class TimeAdapter(private val scheduleTimes: ArrayList<String>) : RecyclerView.A
 
     override fun onBindViewHolder(holder: TimeAdapter.WeekViewHolder, position: Int) {
         holder.tvTime.text = scheduleTimes[position]
-        Log.d("esther", "${scheduleTimes[position]}")
     }
 
 }

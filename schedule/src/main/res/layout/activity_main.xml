@@ -35,15 +35,15 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
             android:text="FEB"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/btn_next"
             app:layout_constraintStart_toEndOf="@+id/btn_next"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/ll_week_view_root"
+        <FrameLayout
+            android:id="@+id/fl_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,7 @@
 package com.android.app_aqi
 
 import android.text.format.DateUtils
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,7 +17,7 @@ object DateUtil {
     }
 
     fun covertDateToTimestamp(date: String): Long {
-        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.TAIWAN)
+        val simpleDateFormat = SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.TAIWAN)
 
         return simpleDateFormat.parse(date).time
     }
